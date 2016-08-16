@@ -44,16 +44,31 @@ public class TimelineActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient();
         populateTimeline();
+
+        setEventListeners();
+    }
+
+
+    private void setEventListeners() {
+        rvTweets.addOnScrollListener(new com.codepath.apps.Chirper.utils.EndlessRecyclerViewScrollListener((LinearLayoutManager) rvTweets.getLayoutManager()) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                populateTimeline();
+            }
+        });
     }
 
     private void populateTimeline() {
         if (Network.isNetworkAvailable(this) && Network.isOnline()) {
-            client.getHomeTimeline(new JsonHttpResponseHandler() {
+            long maxId = -1;
+            if (tweets.size() > 0) {
+                maxId = tweets.get(tweets.size() - 1).getNetworkId();
+            }
+            client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
                     tweets.addAll(Tweet.fromJSONArray(response));
-                    tweetsAdapter.notifyDataSetChanged();
+                    tweetsAdapter.notifyItemRangeInserted(tweets.size() - 20, 20);
                 }
 
                 @Override
