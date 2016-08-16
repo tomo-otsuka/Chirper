@@ -2,6 +2,7 @@ package com.codepath.apps.Chirper.adapters;
 
 import com.codepath.apps.Chirper.R;
 import com.codepath.apps.Chirper.models.Tweet;
+import com.codepath.apps.Chirper.utils.ParseRelativeDate;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -24,6 +25,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.tvBody) TextView tvBody;
+        @BindView(R.id.tvRelativeTime) TextView tvRelativeTime;
         @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
 
         public ViewHolder(View itemView) {
@@ -52,6 +54,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         holder.tvUsername.setText(tweet.getUser().getName());
         holder.tvBody.setText(tweet.getText());
+        holder.tvRelativeTime.setText(ParseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         holder.ivProfileImage.setImageResource(0);
         Picasso.with(mContext).load(tweet.getUser().getProfileImageUrl())
                 .into(holder.ivProfileImage);
