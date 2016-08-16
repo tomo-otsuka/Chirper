@@ -12,6 +12,7 @@ public class Tweet {
     private String createdAt;
     private long networkId;
     private User user;
+    private ArrayList<Entity> entities;
 
     public String getText() {
         return text;
@@ -29,11 +30,20 @@ public class Tweet {
         return user;
     }
 
+    public ArrayList<Entity> getEntities() {
+        return entities;
+    }
+
     public Tweet(JSONObject jsonObject) throws JSONException {
         text = jsonObject.getString("text");
         createdAt = jsonObject.getString("created_at");
         networkId = jsonObject.getLong("id");
         user = new User(jsonObject.getJSONObject("user"));
+
+        entities = new ArrayList<>();
+        try {
+            entities.addAll(Entity.fromJSONArray(jsonObject.getJSONObject("entities").getJSONArray("media")));
+        } catch (JSONException e) {}
     }
 
     public static ArrayList<Tweet> fromJSONArray(JSONArray array) {
