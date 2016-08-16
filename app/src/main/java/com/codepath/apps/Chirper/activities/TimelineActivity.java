@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements ComposeTweetDialogFragment.TweetListener {
 
     private TwitterClient client;
     private ArrayList<Tweet> tweets;
@@ -90,5 +90,14 @@ public class TimelineActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         ComposeTweetDialogFragment composeTweetDialogFragment = ComposeTweetDialogFragment.newInstance();
         composeTweetDialogFragment.show(fm, "fragment_compose_tweet");
+    }
+
+    @Override
+    public void onTweet() {
+        int numTweets = tweets.size();
+        tweets.clear();
+        tweetsAdapter.notifyItemRangeRemoved(0, numTweets);
+
+        populateTimeline();
     }
 }
