@@ -4,6 +4,7 @@ import com.codepath.apps.Chirper.R;
 import com.codepath.apps.Chirper.TwitterApplication;
 import com.codepath.apps.Chirper.TwitterClient;
 import com.codepath.apps.Chirper.adapters.TweetsAdapter;
+import com.codepath.apps.Chirper.fragments.ComposeTweetDialogFragment;
 import com.codepath.apps.Chirper.models.Tweet;
 import com.codepath.apps.Chirper.utils.Network;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -12,6 +13,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 
 public class TimelineActivity extends AppCompatActivity {
@@ -30,6 +34,7 @@ public class TimelineActivity extends AppCompatActivity {
     private TweetsAdapter tweetsAdapter;
 
     @BindView(R.id.rvTweets) RecyclerView rvTweets;
+    @BindView(R.id.fabComposeTweet) FloatingActionButton fabComposeTweet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +52,6 @@ public class TimelineActivity extends AppCompatActivity {
 
         setEventListeners();
     }
-
 
     private void setEventListeners() {
         rvTweets.addOnScrollListener(new com.codepath.apps.Chirper.utils.EndlessRecyclerViewScrollListener((LinearLayoutManager) rvTweets.getLayoutManager()) {
@@ -79,5 +83,12 @@ public class TimelineActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No network detected", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @OnClick(R.id.fabComposeTweet)
+    public void showComposeTweetDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        ComposeTweetDialogFragment composeTweetDialogFragment = ComposeTweetDialogFragment.newInstance();
+        composeTweetDialogFragment.show(fm, "fragment_compose_tweet");
     }
 }
