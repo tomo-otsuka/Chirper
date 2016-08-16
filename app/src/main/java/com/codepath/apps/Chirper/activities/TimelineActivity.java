@@ -5,6 +5,7 @@ import com.codepath.apps.Chirper.TwitterApplication;
 import com.codepath.apps.Chirper.TwitterClient;
 import com.codepath.apps.Chirper.adapters.TweetsAdapter;
 import com.codepath.apps.Chirper.models.Tweet;
+import com.codepath.apps.Chirper.utils.Network;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -35,6 +36,7 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
         ButterKnife.bind(this);
+
         tweets = new ArrayList<>();
         tweetsAdapter = new TweetsAdapter(this, tweets);
         rvTweets.setAdapter(tweetsAdapter);
@@ -45,18 +47,22 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void populateTimeline() {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
-                tweets.addAll(Tweet.fromJSONArray(response));
-                tweetsAdapter.notifyDataSetChanged();
-            }
+        if (Network.isNetworkAvailable(this) && Network.isOnline()) {
+            client.getHomeTimeline(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    super.onSuccess(statusCode, headers, response);
+                    tweets.addAll(Tweet.fromJSONArray(response));
+                    tweetsAdapter.notifyDataSetChanged();
+                }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(TimelineActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Toast.makeText(TimelineActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                }
+            });
+        } else {
+            Toast.makeText(this, "No network detected", Toast.LENGTH_LONG).show();
+        }
     }
 }
