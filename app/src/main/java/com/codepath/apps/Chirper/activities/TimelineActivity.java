@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +34,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
     private ArrayList<Tweet> tweets;
     private TweetsAdapter tweetsAdapter;
 
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     @BindView(R.id.rvTweets) RecyclerView rvTweets;
     @BindView(R.id.fabComposeTweet) FloatingActionButton fabComposeTweet;
 
@@ -60,6 +62,17 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
                 populateTimeline();
             }
         });
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshTimeline();
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     private void populateTimeline() {
@@ -73,16 +86,28 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     tweets.addAll(Tweet.fromJSONArray(response));
                     tweetsAdapter.notifyItemRangeInserted(tweets.size() - 20, 20);
+
+                    swipeContainer.setRefreshing(false);
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     Toast.makeText(TimelineActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
+
+                    swipeContainer.setRefreshing(false);
                 }
             });
         } else {
             Toast.makeText(this, "No network detected", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void refreshTimeline() {
+        int numTweets = tweets.size();
+        tweets.clear();
+        tweetsAdapter.notifyItemRangeRemoved(0, numTweets);
+
+        populateTimeline();
     }
 
     @OnClick(R.id.fabComposeTweet)
@@ -94,10 +119,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
 
     @Override
     public void onTweet() {
-        int numTweets = tweets.size();
-        tweets.clear();
-        tweetsAdapter.notifyItemRangeRemoved(0, numTweets);
-
-        populateTimeline();
+        refreshTimeline();
     }
 }
