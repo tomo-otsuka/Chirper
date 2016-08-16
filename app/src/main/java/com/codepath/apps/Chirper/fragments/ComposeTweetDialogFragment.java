@@ -15,14 +15,18 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import cz.msebera.android.httpclient.Header;
 
 public class ComposeTweetDialogFragment extends DialogFragment {
+
+    private int MAX_CHARS_PER_TWEET = 140;
 
     public interface TweetListener {
         public void onTweet();
@@ -30,6 +34,7 @@ public class ComposeTweetDialogFragment extends DialogFragment {
 
     @BindView(R.id.etTweetText) EditText etTweetText;
     @BindView(R.id.btnSubmitTweet) Button btnSubmitTweet;
+    @BindView(R.id.tvRemainingCharCount) TextView tvRemainingCharCount;
 
     public ComposeTweetDialogFragment() {}
 
@@ -49,13 +54,21 @@ public class ComposeTweetDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         getDialog().setTitle("Compose new Tweet");
+
+        tvRemainingCharCount.setText(String.format("%s", MAX_CHARS_PER_TWEET));
         etTweetText.requestFocus();
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
+    @OnTextChanged(R.id.etTweetText)
+    public void updateRemainingCharCount(CharSequence tweetText) {
+        int remainingLength = MAX_CHARS_PER_TWEET - tweetText.length();
+        tvRemainingCharCount.setText(String.format("%s", remainingLength));
+    }
+
     @OnClick(R.id.btnSubmitTweet)
-    public void submitTweet(View view) {
+    public void submitTweet() {
         TwitterClient client = new TwitterClient(getContext());
         client.postTweet(etTweetText.getText().toString(), new JsonHttpResponseHandler() {
             @Override
