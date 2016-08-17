@@ -1,17 +1,5 @@
 package com.codepath.apps.Chirper.activities;
 
-import com.codepath.apps.Chirper.R;
-import com.codepath.apps.Chirper.TwitterApplication;
-import com.codepath.apps.Chirper.TwitterClient;
-import com.codepath.apps.Chirper.adapters.TweetsAdapter;
-import com.codepath.apps.Chirper.fragments.ComposeTweetDialogFragment;
-import com.codepath.apps.Chirper.models.Tweet;
-import com.codepath.apps.Chirper.utils.Network;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +8,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
+
+import com.codepath.apps.Chirper.R;
+import com.codepath.apps.Chirper.TwitterApplication;
+import com.codepath.apps.Chirper.TwitterClient;
+import com.codepath.apps.Chirper.adapters.TweetsAdapter;
+import com.codepath.apps.Chirper.fragments.ComposeTweetDialogFragment;
+import com.codepath.apps.Chirper.models.Tweet;
+import com.codepath.apps.Chirper.utils.DividerItemDecoration;
+import com.codepath.apps.Chirper.utils.Network;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -48,6 +49,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         tweetsAdapter = new TweetsAdapter(this, tweets);
         rvTweets.setAdapter(tweetsAdapter);
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        rvTweets.addItemDecoration(new DividerItemDecoration(this));
 
         client = TwitterApplication.getRestClient();
         populateTimeline();

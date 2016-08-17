@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
     private ArrayList<Tweet> mTweets;
@@ -29,6 +30,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.tvUsername) TextView tvUsername;
+        @BindView(R.id.tvScreenName) TextView tvScreenName;
         @BindView(R.id.tvBody) TextView tvBody;
         @BindView(R.id.tvRelativeTime) TextView tvRelativeTime;
         @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
@@ -69,10 +71,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         Tweet tweet = mTweets.get(position);
 
         holder.tvUsername.setText(tweet.getUser().getName());
+        String screenName = String.format("@%s", tweet.getUser().getScreenName());
+        holder.tvScreenName.setText(screenName);
         holder.tvBody.setText(tweet.getText());
         holder.tvRelativeTime.setText(ParseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         holder.ivProfileImage.setImageResource(0);
         Picasso.with(mContext).load(tweet.getUser().getProfileImageUrl())
+                .transform(new RoundedCornersTransformation(2, 2))
                 .into(holder.ivProfileImage);
 
         holder.ivEntity.setImageResource(0);
@@ -80,8 +85,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         if (entities.size() > 0) {
             Entity entity = entities.get(0);
             Picasso.with(mContext).load(entity.getUrl())
-                    .fit()
-                    .centerInside()
+                    .transform(new RoundedCornersTransformation(10, 10))
                     .into(holder.ivEntity);
         }
     }

@@ -18,15 +18,16 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class TweetDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.tvUsername) TextView tvUsername;
+    @BindView(R.id.tvScreenName) TextView tvScreenName;
     @BindView(R.id.tvBody) TextView tvBody;
     @BindView(R.id.tvRelativeTime) TextView tvRelativeTime;
     @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
     @BindView(R.id.ivEntity) ImageView ivEntity;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +39,13 @@ public class TweetDetailActivity extends AppCompatActivity {
         Tweet tweet = (Tweet) Parcels.unwrap(intent.getParcelableExtra("tweet"));
 
         tvUsername.setText(tweet.getUser().getName());
+        String screenName = String.format("@%s", tweet.getUser().getScreenName());
+        tvScreenName.setText(screenName);
         tvBody.setText(tweet.getText());
-
         tvRelativeTime.setText(ParseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         ivProfileImage.setImageResource(0);
         Picasso.with(this).load(tweet.getUser().getProfileImageUrl())
+                .transform(new RoundedCornersTransformation(2, 2))
                 .into(ivProfileImage);
 
         ivEntity.setImageResource(0);
@@ -50,8 +53,7 @@ public class TweetDetailActivity extends AppCompatActivity {
         if (entities.size() > 0) {
             Entity entity = entities.get(0);
             Picasso.with(this).load(entity.getUrl())
-                    .fit()
-                    .centerInside()
+                    .transform(new RoundedCornersTransformation(10, 10))
                     .into(ivEntity);
         }
     }

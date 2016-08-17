@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/ivProfileImage"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
@@ -16,35 +17,60 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:layout_toRightOf="@+id/ivProfileImage"
+        android:text="New Text"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvScreenName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="3dp"
+        android:layout_marginStart="3dp"
+        android:layout_toEndOf="@+id/tvUsername"
+        android:layout_toRightOf="@+id/tvUsername"
         android:text="New Text" />
 
     <TextView
         android:id="@+id/tvBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvUsername"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignStart="@+id/tvUsername"
+        android:layout_below="@+id/tvUsername"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_toRightOf="@+id/ivProfileImage"
         android:autoLink="all"
         android:linksClickable="true"
-        android:layout_alignBottom="@+id/ivProfileImage"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tvUsername"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:text="New Text" />
+        android:text="New Text"
+        android:textColor="#000000" />
 
     <TextView
+        android:id="@+id/tvRelativeTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="New Text"
-        android:id="@+id/tvRelativeTime"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentTop="true"
+        android:text="New Text"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
         android:id="@+id/ivEntity"
-        android:layout_below="@+id/ivProfileImage"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvUsername"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignStart="@+id/tvUsername"
+        android:layout_below="@+id/tvBody"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter" />
 </RelativeLayout>

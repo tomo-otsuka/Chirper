@@ -32,6 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
-        android:src="@drawable/twitter_circle"/>
+        android:src="@drawable/tweet_feather"/>
 
 </android.support.design.widget.CoordinatorLayout>
