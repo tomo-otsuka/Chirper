@@ -3,9 +3,11 @@ package com.codepath.apps.Chirper.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
+@Parcel
 public class Entity {
 
     private long networkId;
@@ -23,6 +25,8 @@ public class Entity {
     public String getType() {
         return type;
     }
+
+    public Entity() {}
 
     public Entity(JSONObject jsonObject) {
         url = jsonObject.optString("media_url");

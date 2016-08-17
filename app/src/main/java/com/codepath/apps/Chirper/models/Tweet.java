@@ -3,9 +3,11 @@ package com.codepath.apps.Chirper.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
+@Parcel
 public class Tweet {
 
     private String text;
@@ -33,6 +35,8 @@ public class Tweet {
     public ArrayList<Entity> getEntities() {
         return entities;
     }
+
+    public Tweet() {}
 
     public Tweet(JSONObject jsonObject) throws JSONException {
         text = jsonObject.getString("text");

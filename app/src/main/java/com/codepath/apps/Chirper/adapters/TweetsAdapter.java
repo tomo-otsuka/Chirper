@@ -1,18 +1,22 @@
 package com.codepath.apps.Chirper.adapters;
 
-import com.codepath.apps.Chirper.R;
-import com.codepath.apps.Chirper.models.Entity;
-import com.codepath.apps.Chirper.models.Tweet;
-import com.codepath.apps.Chirper.utils.ParseRelativeDate;
-import com.squareup.picasso.Picasso;
-
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.codepath.apps.Chirper.R;
+import com.codepath.apps.Chirper.activities.TweetDetailActivity;
+import com.codepath.apps.Chirper.models.Entity;
+import com.codepath.apps.Chirper.models.Tweet;
+import com.codepath.apps.Chirper.utils.ParseRelativeDate;
+import com.squareup.picasso.Picasso;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -23,7 +27,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     private ArrayList<Tweet> mTweets;
     private Context mContext;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.tvBody) TextView tvBody;
         @BindView(R.id.tvRelativeTime) TextView tvRelativeTime;
@@ -33,6 +37,16 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getLayoutPosition();
+            Tweet tweet = mTweets.get(position);
+            Intent intent = new Intent(v.getContext(), TweetDetailActivity.class);
+            intent.putExtra("tweet", Parcels.wrap(tweet));
+            v.getContext().startActivity(intent);
         }
     }
 

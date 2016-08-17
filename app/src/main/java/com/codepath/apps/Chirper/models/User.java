@@ -2,7 +2,9 @@ package com.codepath.apps.Chirper.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
+@Parcel
 public class User {
 
     private String name;
@@ -25,6 +27,8 @@ public class User {
     public long getNetworkId() {
         return networkId;
     }
+
+    public User() {}
 
     public User(JSONObject jsonObject) throws JSONException {
         name = jsonObject.getString("name");
