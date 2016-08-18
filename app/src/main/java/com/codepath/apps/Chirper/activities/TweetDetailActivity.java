@@ -93,4 +93,20 @@ public class TweetDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+    @OnClick(R.id.ivLike)
+    public void postLike(View v) {
+        TwitterClient client = new TwitterClient(this);
+        client.postLike(mTweet.getNetworkId(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Toast.makeText(TweetDetailActivity.this, "Like successful", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Toast.makeText(TweetDetailActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }

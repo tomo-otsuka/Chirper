@@ -88,6 +88,24 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 }
             });
         }
+
+        @OnClick(R.id.ivLike)
+        public void postLike(View v) {
+            int position = getLayoutPosition();
+            Tweet tweet = mTweets.get(position);
+            TwitterClient client = new TwitterClient(mContext);
+            client.postLike(tweet.getNetworkId(), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    Toast.makeText(mContext, "Like successful", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Toast.makeText(mContext, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     public TweetsAdapter(Context context, ArrayList<Tweet> tweets) {
