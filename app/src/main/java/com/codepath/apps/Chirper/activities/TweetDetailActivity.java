@@ -1,12 +1,15 @@
 package com.codepath.apps.Chirper.activities;
 
 import com.codepath.apps.Chirper.R;
+import com.codepath.apps.Chirper.TwitterClient;
 import com.codepath.apps.Chirper.fragments.ComposeTweetDialogFragment;
 import com.codepath.apps.Chirper.models.Entity;
 import com.codepath.apps.Chirper.models.Tweet;
 import com.codepath.apps.Chirper.utils.ParseRelativeDate;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import android.content.Intent;
@@ -16,12 +19,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class TweetDetailActivity extends AppCompatActivity {
@@ -71,5 +76,21 @@ public class TweetDetailActivity extends AppCompatActivity {
                 mTweet.getNetworkId(), mTweet.getUser().getScreenName()
         );
         composeTweetDialogFragment.show(fm, "fragment_compose_tweet");
+    }
+
+    @OnClick(R.id.ivRetweet)
+    public void postRetweet(View v) {
+        TwitterClient client = new TwitterClient(this);
+        client.postRetweet(mTweet.getNetworkId(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Toast.makeText(TweetDetailActivity.this, "Retweet successful", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Toast.makeText(TweetDetailActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

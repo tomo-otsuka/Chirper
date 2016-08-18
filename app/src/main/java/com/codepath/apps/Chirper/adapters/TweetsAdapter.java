@@ -1,13 +1,16 @@
 package com.codepath.apps.Chirper.adapters;
 
 import com.codepath.apps.Chirper.R;
+import com.codepath.apps.Chirper.TwitterClient;
 import com.codepath.apps.Chirper.activities.TweetDetailActivity;
 import com.codepath.apps.Chirper.fragments.ComposeTweetDialogFragment;
 import com.codepath.apps.Chirper.models.Entity;
 import com.codepath.apps.Chirper.models.Tweet;
 import com.codepath.apps.Chirper.utils.ParseRelativeDate;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import android.content.Context;
@@ -20,12 +23,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
@@ -64,6 +69,24 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     tweet.getNetworkId(), tweet.getUser().getScreenName()
             );
             composeTweetDialogFragment.show(fm, "fragment_compose_tweet");
+        }
+
+        @OnClick(R.id.ivRetweet)
+        public void postRetweet(View v) {
+            int position = getLayoutPosition();
+            Tweet tweet = mTweets.get(position);
+            TwitterClient client = new TwitterClient(mContext);
+            client.postRetweet(tweet.getNetworkId(), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    Toast.makeText(mContext, "Retweet successful", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Toast.makeText(mContext, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 
