@@ -74,39 +74,73 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         }
 
         @OnClick(R.id.ivRetweet)
-        public void postRetweet(View v) {
+        public void toggleRetweet(View v) {
             int position = getLayoutPosition();
-            Tweet tweet = mTweets.get(position);
+            final Tweet tweet = mTweets.get(position);
             TwitterClient client = new TwitterClient(mContext);
-            client.postRetweet(tweet.getNetworkId(), new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    ivRetweet.setImageResource(R.drawable.retweeted);
-                }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Toast.makeText(mContext, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                }
-            });
+            if (tweet.getRetweeted()) {
+                client.postUnretweet(tweet.getNetworkId(), new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        tweet.setRetweeted(false);
+                        ivRetweet.setImageResource(R.drawable.retweet);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Toast.makeText(mContext, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                client.postRetweet(tweet.getNetworkId(), new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        tweet.setRetweeted(true);
+                        ivRetweet.setImageResource(R.drawable.retweeted);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Toast.makeText(mContext, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
         }
 
         @OnClick(R.id.ivLike)
-        public void postLike(View v) {
+        public void toggleLike(View v) {
             int position = getLayoutPosition();
-            Tweet tweet = mTweets.get(position);
+            final Tweet tweet = mTweets.get(position);
             TwitterClient client = new TwitterClient(mContext);
-            client.postLike(tweet.getNetworkId(), new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    ivLike.setImageResource(R.drawable.liked);
-                }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Toast.makeText(mContext, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                }
-            });
+            if (tweet.getLiked()) {
+                client.postUnlike(tweet.getNetworkId(), new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        tweet.setLiked(false);
+                        ivLike.setImageResource(R.drawable.like);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Toast.makeText(mContext, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                client.postLike(tweet.getNetworkId(), new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        tweet.setLiked(true);
+                        ivLike.setImageResource(R.drawable.liked);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Toast.makeText(mContext, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
         }
     }
 

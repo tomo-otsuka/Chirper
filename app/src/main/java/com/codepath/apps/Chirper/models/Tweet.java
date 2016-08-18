@@ -56,6 +56,15 @@ public class Tweet {
         return retweetCount;
     }
 
+    public void setRetweeted(Boolean retweeted) {
+        this.retweeted = retweeted;
+    }
+
+    public void setLiked(Boolean liked) {
+        this.liked = liked;
+    }
+
+
     public Tweet() {}
 
     public Tweet(JSONObject jsonObject) throws JSONException {

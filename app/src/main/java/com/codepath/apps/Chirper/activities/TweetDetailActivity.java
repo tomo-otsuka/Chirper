@@ -88,34 +88,66 @@ public class TweetDetailActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.ivRetweet)
-    public void postRetweet(View v) {
+    public void toggleRetweet(View v) {
         TwitterClient client = new TwitterClient(this);
-        client.postRetweet(mTweet.getNetworkId(), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                ivRetweet.setImageResource(R.drawable.retweeted);
-            }
+        if (mTweet.getRetweeted()) {
+            client.postUnretweet(mTweet.getNetworkId(), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    mTweet.setRetweeted(false);
+                    ivRetweet.setImageResource(R.drawable.retweet);
+                }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(TweetDetailActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Toast.makeText(TweetDetailActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                }
+            });
+        } else {
+            client.postRetweet(mTweet.getNetworkId(), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    mTweet.setRetweeted(true);
+                    ivRetweet.setImageResource(R.drawable.retweeted);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Toast.makeText(TweetDetailActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     @OnClick(R.id.ivLike)
-    public void postLike(View v) {
+    public void toggleLike(View v) {
         TwitterClient client = new TwitterClient(this);
-        client.postLike(mTweet.getNetworkId(), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                ivLike.setImageResource(R.drawable.liked);
-            }
+        if (mTweet.getLiked()) {
+            client.postUnlike(mTweet.getNetworkId(), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    mTweet.setLiked(false);
+                    ivLike.setImageResource(R.drawable.like);
+                }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(TweetDetailActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Toast.makeText(TweetDetailActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                }
+            });
+        } else {
+            client.postLike(mTweet.getNetworkId(), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    mTweet.setLiked(true);
+                    ivLike.setImageResource(R.drawable.liked);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Toast.makeText(TweetDetailActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 }
