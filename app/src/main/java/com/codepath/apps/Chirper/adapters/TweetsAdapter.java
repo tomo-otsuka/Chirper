@@ -44,6 +44,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         @BindView(R.id.tvRelativeTime) TextView tvRelativeTime;
         @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
         @BindView(R.id.ivEntity) ImageView ivEntity;
+        @BindView(R.id.ivRetweet) ImageView ivRetweet;
         @BindView(R.id.ivLike) ImageView ivLike;
 
         public ViewHolder(View itemView) {
@@ -80,7 +81,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             client.postRetweet(tweet.getNetworkId(), new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    Toast.makeText(mContext, "Retweet successful", Toast.LENGTH_LONG).show();
+                    ivRetweet.setImageResource(R.drawable.retweeted);
                 }
 
                 @Override
@@ -146,6 +147,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     .into(holder.ivEntity);
         }
 
+        if (tweet.getRetweeted()) {
+            holder.ivRetweet.setImageResource(R.drawable.retweeted);
+        }
         if (tweet.getLiked()) {
             holder.ivLike.setImageResource(R.drawable.liked);
         }

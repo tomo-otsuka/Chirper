@@ -37,6 +37,7 @@ public class TweetDetailActivity extends AppCompatActivity {
     @BindView(R.id.tvRelativeTime) TextView tvRelativeTime;
     @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
     @BindView(R.id.ivEntity) ImageView ivEntity;
+    @BindView(R.id.ivRetweet) ImageView ivRetweet;
     @BindView(R.id.ivLike) ImageView ivLike;
 
     private Tweet mTweet;
@@ -69,6 +70,9 @@ public class TweetDetailActivity extends AppCompatActivity {
                     .into(ivEntity);
         }
 
+        if (mTweet.getRetweeted()) {
+            ivRetweet.setImageResource(R.drawable.retweeted);
+        }
         if (mTweet.getLiked()) {
             ivLike.setImageResource(R.drawable.liked);
         }
@@ -89,7 +93,7 @@ public class TweetDetailActivity extends AppCompatActivity {
         client.postRetweet(mTweet.getNetworkId(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Toast.makeText(TweetDetailActivity.this, "Retweet successful", Toast.LENGTH_LONG).show();
+                ivRetweet.setImageResource(R.drawable.retweeted);
             }
 
             @Override
