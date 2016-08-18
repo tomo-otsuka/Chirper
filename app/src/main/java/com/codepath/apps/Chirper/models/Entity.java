@@ -10,9 +10,9 @@ import java.util.ArrayList;
 @Parcel
 public class Entity {
 
-    private long networkId;
-    private String url;
-    private String type;
+    public long networkId;
+    public String url;
+    public String type;
 
     public long getNetworkId() {
         return networkId;

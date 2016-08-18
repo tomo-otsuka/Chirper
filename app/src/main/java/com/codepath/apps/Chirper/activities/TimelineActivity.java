@@ -1,14 +1,5 @@
 package com.codepath.apps.Chirper.activities;
 
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
-
 import com.codepath.apps.Chirper.R;
 import com.codepath.apps.Chirper.TwitterApplication;
 import com.codepath.apps.Chirper.TwitterClient;
@@ -21,6 +12,15 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -115,7 +115,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
     @OnClick(R.id.fabComposeTweet)
     public void showComposeTweetDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        ComposeTweetDialogFragment composeTweetDialogFragment = ComposeTweetDialogFragment.newInstance();
+        ComposeTweetDialogFragment composeTweetDialogFragment = ComposeTweetDialogFragment.newInstance(0, null);
         composeTweetDialogFragment.show(fm, "fragment_compose_tweet");
     }
 

@@ -7,10 +7,10 @@ import org.parceler.Parcel;
 @Parcel
 public class User {
 
-    private String name;
-    private String screenName;
-    private String profileImageUrl;
-    private long networkId;
+    public String name;
+    public String screenName;
+    public String profileImageUrl;
+    public long networkId;
 
     public String getName() {
         return name;

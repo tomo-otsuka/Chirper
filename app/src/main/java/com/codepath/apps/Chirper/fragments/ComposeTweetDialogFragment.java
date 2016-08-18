@@ -27,6 +27,7 @@ import cz.msebera.android.httpclient.Header;
 public class ComposeTweetDialogFragment extends DialogFragment {
 
     private int MAX_CHARS_PER_TWEET = 140;
+    private long mReplyToId;
 
     public interface TweetListener {
         public void onTweet();
@@ -38,8 +39,12 @@ public class ComposeTweetDialogFragment extends DialogFragment {
 
     public ComposeTweetDialogFragment() {}
 
-    public static ComposeTweetDialogFragment newInstance() {
+    public static ComposeTweetDialogFragment newInstance(long replyToId, String replyToScreenName) {
         ComposeTweetDialogFragment frag = new ComposeTweetDialogFragment();
+        Bundle args = new Bundle();
+        args.putLong("replyToId", replyToId);
+        args.putString("replyToScreenName", replyToScreenName);
+        frag.setArguments(args);
         return frag;
     }
 
@@ -55,7 +60,13 @@ public class ComposeTweetDialogFragment extends DialogFragment {
         ButterKnife.bind(this, view);
         getDialog().setTitle("Compose new Tweet");
 
-        tvRemainingCharCount.setText(String.format("%s", MAX_CHARS_PER_TWEET));
+        String replyToScreenName = getArguments().getString("replyToScreenName");
+        String tweetText = "";
+        if (replyToScreenName != null && replyToScreenName.length() != 0) {
+            tweetText = String.format("@%s ", replyToScreenName);
+            etTweetText.setText(tweetText);
+        }
+        tvRemainingCharCount.setText(String.format("%s", MAX_CHARS_PER_TWEET - tweetText.length()));
         etTweetText.requestFocus();
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -69,8 +80,9 @@ public class ComposeTweetDialogFragment extends DialogFragment {
 
     @OnClick(R.id.btnSubmitTweet)
     public void submitTweet() {
+        long replyToId = getArguments().getLong("replyToId");
         TwitterClient client = new TwitterClient(getContext());
-        client.postTweet(etTweetText.getText().toString(), new JsonHttpResponseHandler() {
+        client.postTweet(etTweetText.getText().toString(), replyToId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 TweetListener listener = (TweetListener) getActivity();

@@ -10,11 +10,11 @@ import java.util.ArrayList;
 @Parcel
 public class Tweet {
 
-    private String text;
-    private String createdAt;
-    private long networkId;
-    private User user;
-    private ArrayList<Entity> entities;
+    public String text;
+    public String createdAt;
+    public long networkId;
+    public User user;
+    public ArrayList<Entity> entities;
 
     public String getText() {
         return text;

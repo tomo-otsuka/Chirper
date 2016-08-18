@@ -1,16 +1,8 @@
 package com.codepath.apps.Chirper.adapters;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.codepath.apps.Chirper.R;
 import com.codepath.apps.Chirper.activities.TweetDetailActivity;
+import com.codepath.apps.Chirper.fragments.ComposeTweetDialogFragment;
 import com.codepath.apps.Chirper.models.Entity;
 import com.codepath.apps.Chirper.models.Tweet;
 import com.codepath.apps.Chirper.utils.ParseRelativeDate;
@@ -18,10 +10,22 @@ import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
@@ -49,6 +53,17 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             Intent intent = new Intent(v.getContext(), TweetDetailActivity.class);
             intent.putExtra("tweet", Parcels.wrap(tweet));
             v.getContext().startActivity(intent);
+        }
+
+        @OnClick(R.id.ivReply)
+        public void showComposeTweetDialog(View v) {
+            int position = getLayoutPosition();
+            Tweet tweet = mTweets.get(position);
+            FragmentManager fm = ((AppCompatActivity) mContext).getSupportFragmentManager();
+            ComposeTweetDialogFragment composeTweetDialogFragment = ComposeTweetDialogFragment.newInstance(
+                    tweet.getNetworkId(), tweet.getUser().getScreenName()
+            );
+            composeTweetDialogFragment.show(fm, "fragment_compose_tweet");
         }
     }
 
