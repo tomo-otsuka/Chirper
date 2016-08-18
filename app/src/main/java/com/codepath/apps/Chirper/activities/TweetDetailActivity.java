@@ -37,6 +37,7 @@ public class TweetDetailActivity extends AppCompatActivity {
     @BindView(R.id.tvRelativeTime) TextView tvRelativeTime;
     @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
     @BindView(R.id.ivEntity) ImageView ivEntity;
+    @BindView(R.id.ivLike) ImageView ivLike;
 
     private Tweet mTweet;
 
@@ -66,6 +67,10 @@ public class TweetDetailActivity extends AppCompatActivity {
             Picasso.with(this).load(entity.getUrl())
                     .transform(new RoundedCornersTransformation(10, 10))
                     .into(ivEntity);
+        }
+
+        if (mTweet.getLiked()) {
+            ivLike.setImageResource(R.drawable.liked);
         }
     }
 
@@ -100,7 +105,7 @@ public class TweetDetailActivity extends AppCompatActivity {
         client.postLike(mTweet.getNetworkId(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Toast.makeText(TweetDetailActivity.this, "Like successful", Toast.LENGTH_LONG).show();
+                ivLike.setImageResource(R.drawable.liked);
             }
 
             @Override

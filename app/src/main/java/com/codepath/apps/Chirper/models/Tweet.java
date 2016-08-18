@@ -15,6 +15,10 @@ public class Tweet {
     public long networkId;
     public User user;
     public ArrayList<Entity> entities;
+    public Boolean liked;
+    public long likeCount;
+    public Boolean retweeted;
+    public long retweetCount;
 
     public String getText() {
         return text;
@@ -36,6 +40,22 @@ public class Tweet {
         return entities;
     }
 
+    public Boolean getLiked() {
+        return liked;
+    }
+
+    public long getLikeCount() {
+        return likeCount;
+    }
+
+    public Boolean getRetweeted() {
+        return retweeted;
+    }
+
+    public long getRetweetCount() {
+        return retweetCount;
+    }
+
     public Tweet() {}
 
     public Tweet(JSONObject jsonObject) throws JSONException {
@@ -48,6 +68,11 @@ public class Tweet {
         try {
             entities.addAll(Entity.fromJSONArray(jsonObject.getJSONObject("entities").getJSONArray("media")));
         } catch (JSONException e) {}
+
+        liked = jsonObject.getBoolean("favorited");
+        likeCount = jsonObject.getLong("favorite_count");
+        retweeted = jsonObject.getBoolean("retweeted");
+        retweetCount = jsonObject.getLong("retweet_count");
     }
 
     public static ArrayList<Tweet> fromJSONArray(JSONArray array) {
