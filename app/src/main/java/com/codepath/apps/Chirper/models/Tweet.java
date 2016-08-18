@@ -64,6 +64,13 @@ public class Tweet {
         this.liked = liked;
     }
 
+    public void setLikeCount(long likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public void setRetweetCount(long retweetCount) {
+        this.retweetCount = retweetCount;
+    }
 
     public Tweet() {}
 

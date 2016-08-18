@@ -16,6 +16,7 @@ import org.parceler.Parcels;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -77,7 +78,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         @OnClick(R.id.ivRetweet)
         public void toggleRetweet(View v) {
-            int position = getLayoutPosition();
+            final int position = getLayoutPosition();
             final Tweet tweet = mTweets.get(position);
             TwitterClient client = new TwitterClient(mContext);
 
@@ -86,7 +87,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         tweet.setRetweeted(false);
-                        ivRetweet.setImageResource(R.drawable.retweet);
+                        tweet.setRetweetCount(tweet.getRetweetCount() - 1);
+
+                        notifyItemChanged(position);
                     }
 
                     @Override
@@ -99,7 +102,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         tweet.setRetweeted(true);
-                        ivRetweet.setImageResource(R.drawable.retweeted);
+                        tweet.setRetweetCount(tweet.getRetweetCount() + 1);
+
+                        notifyItemChanged(position);
                     }
 
                     @Override
@@ -112,7 +117,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         @OnClick(R.id.ivLike)
         public void toggleLike(View v) {
-            int position = getLayoutPosition();
+            final int position = getLayoutPosition();
             final Tweet tweet = mTweets.get(position);
             TwitterClient client = new TwitterClient(mContext);
 
@@ -121,7 +126,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         tweet.setLiked(false);
-                        ivLike.setImageResource(R.drawable.like);
+                        tweet.setLikeCount(tweet.getLikeCount() - 1);
+
+                        notifyItemChanged(position);
                     }
 
                     @Override
@@ -134,7 +141,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         tweet.setLiked(true);
-                        ivLike.setImageResource(R.drawable.liked);
+                        tweet.setLikeCount(tweet.getLikeCount() + 1);
+
+                        notifyItemChanged(position);
                     }
 
                     @Override
@@ -185,9 +194,17 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         if (tweet.getRetweeted()) {
             holder.ivRetweet.setImageResource(R.drawable.retweeted);
+            holder.tvRetweetCount.setTextColor(ContextCompat.getColor(mContext, R.color.retweeted));
+        } else {
+            holder.ivRetweet.setImageResource(R.drawable.retweet);
+            holder.tvRetweetCount.setTextColor(ContextCompat.getColor(mContext, R.color.twitter_grey));
         }
         if (tweet.getLiked()) {
             holder.ivLike.setImageResource(R.drawable.liked);
+            holder.tvLikeCount.setTextColor(ContextCompat.getColor(mContext, R.color.liked));
+        } else {
+            holder.ivLike.setImageResource(R.drawable.like);
+            holder.tvLikeCount.setTextColor(ContextCompat.getColor(mContext, R.color.twitter_grey));
         }
 
         holder.tvRetweetCount.setText(String.format("%s", tweet.getRetweetCount()));

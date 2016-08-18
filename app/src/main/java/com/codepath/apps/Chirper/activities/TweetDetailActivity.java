@@ -15,6 +15,7 @@ import org.parceler.Parcels;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,6 +40,8 @@ public class TweetDetailActivity extends AppCompatActivity {
     @BindView(R.id.ivEntity) ImageView ivEntity;
     @BindView(R.id.ivRetweet) ImageView ivRetweet;
     @BindView(R.id.ivLike) ImageView ivLike;
+    @BindView(R.id.tvRetweetCount) TextView tvRetweetCount;
+    @BindView(R.id.tvLikeCount) TextView tvLikeCount;
 
     private Tweet mTweet;
 
@@ -72,10 +75,21 @@ public class TweetDetailActivity extends AppCompatActivity {
 
         if (mTweet.getRetweeted()) {
             ivRetweet.setImageResource(R.drawable.retweeted);
+            tvRetweetCount.setTextColor(ContextCompat.getColor(this, R.color.retweeted));
+        } else {
+            ivRetweet.setImageResource(R.drawable.retweet);
+            tvRetweetCount.setTextColor(ContextCompat.getColor(this, R.color.twitter_grey));
         }
         if (mTweet.getLiked()) {
             ivLike.setImageResource(R.drawable.liked);
+            tvLikeCount.setTextColor(ContextCompat.getColor(this, R.color.liked));
+        } else {
+            ivLike.setImageResource(R.drawable.like);
+            tvLikeCount.setTextColor(ContextCompat.getColor(this, R.color.twitter_grey));
         }
+
+        tvRetweetCount.setText(String.format("%s", mTweet.getRetweetCount()));
+        tvLikeCount.setText(String.format("%s", mTweet.getLikeCount()));
     }
 
     @OnClick(R.id.ivReply)
@@ -95,7 +109,10 @@ public class TweetDetailActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     mTweet.setRetweeted(false);
+                    mTweet.setRetweetCount(mTweet.getRetweetCount() - 1);
                     ivRetweet.setImageResource(R.drawable.retweet);
+                    tvRetweetCount.setText(String.format("%s", mTweet.getRetweetCount()));
+                    tvRetweetCount.setTextColor(ContextCompat.getColor(TweetDetailActivity.this, R.color.twitter_grey));
                 }
 
                 @Override
@@ -108,7 +125,10 @@ public class TweetDetailActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     mTweet.setRetweeted(true);
+                    mTweet.setRetweetCount(mTweet.getRetweetCount() + 1);
                     ivRetweet.setImageResource(R.drawable.retweeted);
+                    tvRetweetCount.setText(String.format("%s", mTweet.getRetweetCount()));
+                    tvRetweetCount.setTextColor(ContextCompat.getColor(TweetDetailActivity.this, R.color.retweeted));
                 }
 
                 @Override
@@ -127,7 +147,10 @@ public class TweetDetailActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     mTweet.setLiked(false);
+                    mTweet.setLikeCount(mTweet.getLikeCount() - 1);
                     ivLike.setImageResource(R.drawable.like);
+                    tvLikeCount.setText(String.format("%s", mTweet.getLikeCount()));
+                    tvLikeCount.setTextColor(ContextCompat.getColor(TweetDetailActivity.this, R.color.twitter_grey));
                 }
 
                 @Override
@@ -140,7 +163,10 @@ public class TweetDetailActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     mTweet.setLiked(true);
+                    mTweet.setLikeCount(mTweet.getLikeCount() + 1);
                     ivLike.setImageResource(R.drawable.liked);
+                    tvLikeCount.setText(String.format("%s", mTweet.getLikeCount()));
+                    tvLikeCount.setTextColor(ContextCompat.getColor(TweetDetailActivity.this, R.color.liked));
                 }
 
                 @Override
