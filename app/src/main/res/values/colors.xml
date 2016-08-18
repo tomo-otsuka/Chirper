@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="twitter_grey">#AAB8C2</color>
+    <color name="retweeted">#19CF86</color>
+    <color name="liked">#E81C4F</color>
+</resources>

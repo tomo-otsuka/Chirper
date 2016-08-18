@@ -101,6 +101,17 @@
         android:padding="5dp"
         android:src="@drawable/retweet" />
 
+    <TextView
+        android:id="@+id/tvRetweetCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivRetweet"
+        android:layout_alignTop="@+id/ivRetweet"
+        android:layout_toEndOf="@+id/ivRetweet"
+        android:layout_toRightOf="@id/ivRetweet"
+        android:gravity="center"
+        android:textColor="@color/twitter_grey" />
+
     <ImageView
         android:id="@+id/ivLike"
         android:layout_width="wrap_content"
@@ -108,9 +119,20 @@
         android:layout_below="@+id/ivEntity"
         android:layout_marginLeft="25dp"
         android:layout_marginStart="25dp"
-        android:layout_toEndOf="@+id/ivRetweet"
-        android:layout_toRightOf="@+id/ivRetweet"
+        android:layout_toEndOf="@+id/tvRetweetCount"
+        android:layout_toRightOf="@+id/tvRetweetCount"
         android:padding="5dp"
         android:src="@drawable/like" />
+
+    <TextView
+        android:id="@+id/tvLikeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivLike"
+        android:layout_alignTop="@+id/ivLike"
+        android:layout_toEndOf="@+id/ivLike"
+        android:layout_toRightOf="@id/ivLike"
+        android:gravity="center"
+        android:textColor="@color/twitter_grey" />
 
 </RelativeLayout>

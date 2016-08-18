@@ -46,6 +46,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         @BindView(R.id.ivEntity) ImageView ivEntity;
         @BindView(R.id.ivRetweet) ImageView ivRetweet;
         @BindView(R.id.ivLike) ImageView ivLike;
+        @BindView(R.id.tvRetweetCount) TextView tvRetweetCount;
+        @BindView(R.id.tvLikeCount) TextView tvLikeCount;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -187,6 +189,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         if (tweet.getLiked()) {
             holder.ivLike.setImageResource(R.drawable.liked);
         }
+
+        holder.tvRetweetCount.setText(String.format("%s", tweet.getRetweetCount()));
+        holder.tvLikeCount.setText(String.format("%s", tweet.getLikeCount()));
     }
 
     @Override
