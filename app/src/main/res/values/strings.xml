@@ -2,6 +2,6 @@
 <resources>
 
     <string name="app_name">Chirper</string>
-    <string name="login_label">Log in</string>
+    <string name="login_label">Sign in with Twitter</string>
 
 </resources>

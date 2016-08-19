@@ -6,14 +6,26 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".LoginActivity" >
+    tools:context=".LoginActivity"
+    android:background="?colorPrimary">
+
+    <ImageView
+        android:id="@+id/ivTwitterBird"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="100dp"
+        android:foregroundGravity="center"
+        android:src="@drawable/twitter_bird" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/ivTwitterBird"
         android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+        android:layout_marginTop="150dp"
         android:onClick="loginToRest"
+        android:textColor="#ffffff"
+        android:background="?colorAccent"
         android:text="@string/login_label" />
 
 </RelativeLayout>
