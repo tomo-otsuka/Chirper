@@ -26,6 +26,7 @@
         android:onClick="loginToRest"
         android:textColor="#ffffff"
         android:background="?colorAccent"
+        android:textAllCaps="false"
         android:text="@string/login_label" />
 
 </RelativeLayout>
