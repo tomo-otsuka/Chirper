@@ -3,5 +3,7 @@
 
     <string name="app_name">Chirper</string>
     <string name="login_label">Sign in with Twitter</string>
+    <string name="compose_tweet_hint">What\'s happening?</string>
+    <string name="tweet">Tweet</string>
 
 </resources>
