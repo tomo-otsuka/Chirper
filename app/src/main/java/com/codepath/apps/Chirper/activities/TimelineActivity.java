@@ -88,7 +88,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     tweets.addAll(Tweet.fromJSONArray(response));
                     for (Tweet tweet : tweets) {
-                        tweet.save();
+                        tweet.saveIfNew();
                     }
                     tweetsAdapter.notifyItemRangeInserted(tweets.size() - 20, 20);
 
@@ -97,7 +97,13 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Toast.makeText(TimelineActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                    String errorString = null;
+                    if (errorResponse == null) {
+                        errorString = "Unknown network error";
+                    } else {
+                        errorString = errorResponse.toString();
+                    }
+                    Toast.makeText(TimelineActivity.this, errorString, Toast.LENGTH_LONG).show();
 
                     swipeContainer.setRefreshing(false);
                 }

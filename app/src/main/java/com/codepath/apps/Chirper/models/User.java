@@ -3,6 +3,7 @@ package com.codepath.apps.Chirper.models;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 
 import org.json.JSONException;
@@ -48,6 +49,16 @@ public class User extends Model {
         screenName = jsonObject.getString("screen_name");
         profileImageUrl = jsonObject.getString("profile_image_url");
         networkId = jsonObject.getLong("id");
+    }
+
+    public User getOrCreate() {
+        From query = new Select().from(User.class).where("networkId = ?", getNetworkId());
+        if (!query.exists()) {
+            save();
+            return this;
+        } else {
+            return query.executeSingle();
+        }
     }
 
     public static User byId(long id) {

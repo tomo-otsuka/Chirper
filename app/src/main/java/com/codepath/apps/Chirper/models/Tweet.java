@@ -102,13 +102,13 @@ public class Tweet extends Model {
         createdAt = jsonObject.getString("created_at");
         networkId = jsonObject.getLong("id");
         user = new User(jsonObject.getJSONObject("user"));
-        user.save();
+        user = user.getOrCreate();
 
         entities = new ArrayList<>();
         try {
             for (Entity entity : Entity.fromJSONArray(jsonObject.getJSONObject("entities").getJSONArray("media"))) {
                 entity.setTweet(this);
-                entity.save();
+                entity.saveIfNew();
                 entities.add(entity);
             }
         } catch (JSONException e) {}
@@ -129,6 +129,13 @@ public class Tweet extends Model {
             }
         }
         return results;
+    }
+
+    public Long saveIfNew() {
+        if (!new Select().from(Tweet.class).where("networkId = ?", getNetworkId()).exists()) {
+            return save();
+        }
+        return null;
     }
 
     public static List<Tweet> recentItems() {

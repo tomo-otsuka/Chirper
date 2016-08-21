@@ -74,6 +74,13 @@ public class Entity extends Model {
         return results;
     }
 
+    public Long saveIfNew() {
+        if (!new Select().from(Entity.class).where("networkId = ?", getNetworkId()).exists()) {
+            return save();
+        }
+        return null;
+    }
+
     public static List<Entity> getByTweet(Tweet tweet) {
         return new Select().from(Entity.class).where("tweet = ?", tweet.getId()).execute();
     }

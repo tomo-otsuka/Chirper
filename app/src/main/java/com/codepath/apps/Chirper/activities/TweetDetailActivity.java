@@ -30,7 +30,7 @@ import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
-public class TweetDetailActivity extends AppCompatActivity {
+public class TweetDetailActivity extends AppCompatActivity implements ComposeTweetDialogFragment.TweetListener {
 
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvScreenName) TextView tvScreenName;
@@ -176,4 +176,7 @@ public class TweetDetailActivity extends AppCompatActivity {
             });
         }
     }
+
+    @Override
+    public void onTweet() {}
 }
