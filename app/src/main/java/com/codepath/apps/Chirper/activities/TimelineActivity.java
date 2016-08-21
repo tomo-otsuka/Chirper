@@ -87,6 +87,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     tweets.addAll(Tweet.fromJSONArray(response));
+                    for (Tweet tweet : tweets) {
+                        tweet.save();
+                    }
                     tweetsAdapter.notifyItemRangeInserted(tweets.size() - 20, 20);
 
                     swipeContainer.setRefreshing(false);
@@ -100,7 +103,13 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
                 }
             });
         } else {
-            Toast.makeText(this, "No network detected", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No network detected. Loading tweets from cache", Toast.LENGTH_LONG).show();
+
+            tweets.clear();
+            tweets.addAll(Tweet.recentItems());
+            tweetsAdapter.notifyDataSetChanged();
+
+            swipeContainer.setRefreshing(false);
         }
     }
 

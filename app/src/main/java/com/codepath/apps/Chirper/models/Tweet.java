@@ -1,23 +1,46 @@
 package com.codepath.apps.Chirper.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
+import java.util.List;
 
-@Parcel
-public class Tweet {
+@Table(name = "tweet")
+@Parcel(analyze = {Tweet.class})
+public class Tweet extends Model {
 
+    @Column(name = "text")
     public String text;
+
+    @Column(name = "createdAt")
     public String createdAt;
+
+    @Column(name = "networkId")
     public long networkId;
+
+    @Column(name = "user")
     public User user;
+
     public ArrayList<Entity> entities;
+
+    @Column(name = "liked")
     public Boolean liked;
+
+    @Column(name = "likeCount")
     public long likeCount;
+
+    @Column(name = "retweeted")
     public Boolean retweeted;
+
+    @Column(name = "retweetCount")
     public long retweetCount;
 
     public String getText() {
@@ -72,17 +95,22 @@ public class Tweet {
         this.retweetCount = retweetCount;
     }
 
-    public Tweet() {}
+    public Tweet() { super(); }
 
     public Tweet(JSONObject jsonObject) throws JSONException {
         text = jsonObject.getString("text");
         createdAt = jsonObject.getString("created_at");
         networkId = jsonObject.getLong("id");
         user = new User(jsonObject.getJSONObject("user"));
+        user.save();
 
         entities = new ArrayList<>();
         try {
-            entities.addAll(Entity.fromJSONArray(jsonObject.getJSONObject("entities").getJSONArray("media")));
+            for (Entity entity : Entity.fromJSONArray(jsonObject.getJSONObject("entities").getJSONArray("media"))) {
+                entity.setTweet(this);
+                entity.save();
+                entities.add(entity);
+            }
         } catch (JSONException e) {}
 
         liked = jsonObject.getBoolean("favorited");
@@ -101,5 +129,14 @@ public class Tweet {
             }
         }
         return results;
+    }
+
+    public static List<Tweet> recentItems() {
+        List<Tweet> tweets = new Select().from(Tweet.class).orderBy("createdAt DESC").limit("300").execute();
+        for (Tweet tweet : tweets) {
+            tweet.entities = new ArrayList<Entity>();
+            tweet.entities.addAll(Entity.getByTweet(tweet));
+        }
+        return tweets;
     }
 }

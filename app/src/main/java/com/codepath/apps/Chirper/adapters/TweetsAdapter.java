@@ -185,7 +185,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         holder.ivEntity.setImageResource(0);
         ArrayList<Entity> entities = tweet.getEntities();
-        if (entities.size() > 0) {
+        if (entities != null && entities.size() > 0) {
             Entity entity = entities.get(0);
             Picasso.with(mContext).load(entity.getUrl())
                     .transform(new RoundedCornersTransformation(10, 10))
