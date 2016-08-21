@@ -6,9 +6,12 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +79,24 @@ public class ComposeTweetDialogFragment extends DialogFragment {
     public void updateRemainingCharCount(CharSequence tweetText) {
         int remainingLength = MAX_CHARS_PER_TWEET - tweetText.length();
         tvRemainingCharCount.setText(String.format("%s", remainingLength));
+
+        if (remainingLength < 0) {
+            btnSubmitTweet.setEnabled(false);
+            int grey = ContextCompat.getColor(getContext(), R.color.twitter_grey);
+            btnSubmitTweet.setBackgroundColor(grey);
+            tvRemainingCharCount.setTextColor(Color.RED);
+        }
+
+        if (!btnSubmitTweet.isEnabled() && remainingLength >= 0) {
+            btnSubmitTweet.setEnabled(true);
+
+            final TypedValue value = new TypedValue();
+            getContext().getTheme().resolveAttribute(R.attr.colorPrimary, value, true);
+            int primary = value.data;
+
+            btnSubmitTweet.setBackgroundColor(primary);
+            tvRemainingCharCount.setTextColor(Color.LTGRAY);
+        }
     }
 
     @OnClick(R.id.btnSubmitTweet)
