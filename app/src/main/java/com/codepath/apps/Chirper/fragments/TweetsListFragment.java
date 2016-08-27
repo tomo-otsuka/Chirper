@@ -68,7 +68,9 @@ abstract class TweetsListFragment extends Fragment implements ComposeTweetDialog
         rvTweets.addOnScrollListener(new com.codepath.apps.Chirper.utils.EndlessRecyclerViewScrollListener((LinearLayoutManager) rvTweets.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                populateTimeline();
+                if (totalItemsCount >= 25) {
+                    populateTimeline();
+                }
             }
         });
 
