@@ -26,6 +26,15 @@ public class User extends Model {
     @Column(name = "networkId")
     public long networkId;
 
+    @Column(name = "bio")
+    public String bio;
+
+    @Column(name = "followersCount")
+    public int followersCount;
+
+    @Column(name = "followingCount")
+    public int followingCount;
+
     public String getName() {
         return name;
     }
@@ -42,6 +51,18 @@ public class User extends Model {
         return networkId;
     }
 
+    public String getBio() {
+        return bio;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public int getFollowingCount() {
+        return followingCount;
+    }
+
     public User() { super(); }
 
     public User(JSONObject jsonObject) throws JSONException {
@@ -49,6 +70,9 @@ public class User extends Model {
         screenName = jsonObject.getString("screen_name");
         profileImageUrl = jsonObject.getString("profile_image_url");
         networkId = jsonObject.getLong("id");
+        bio = jsonObject.getString("description");
+        followersCount = jsonObject.getInt("followers_count");
+        followingCount = jsonObject.getInt("friends_count");
     }
 
     public User getOrCreate() {

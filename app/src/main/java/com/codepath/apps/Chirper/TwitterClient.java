@@ -24,15 +24,15 @@ import android.widget.Toast;
  * 
  */
 public class TwitterClient extends OAuthBaseClient {
-	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this
-	public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
-	public static final String REST_CONSUMER_KEY = "FrByRiTB87aEtz910UvJAlxE9";       // Change this
-	public static final String REST_CONSUMER_SECRET = "XhDCxmGo0DJkqlvDbWGVFcTxErynbreUqMXaj1KyKaMu5fQW4l"; // Change this
-	public static final String REST_CALLBACK_URL = "oauth://cbchirper"; // Change this (here and in manifest)
+    public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this
+    public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
+    public static final String REST_CONSUMER_KEY = "FrByRiTB87aEtz910UvJAlxE9";       // Change this
+    public static final String REST_CONSUMER_SECRET = "XhDCxmGo0DJkqlvDbWGVFcTxErynbreUqMXaj1KyKaMu5fQW4l"; // Change this
+    public static final String REST_CALLBACK_URL = "oauth://cbchirper"; // Change this (here and in manifest)
 
-	public TwitterClient(Context context) {
-		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
-	}
+    public TwitterClient(Context context) {
+        super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
+    }
 
     private void get(String apiUrl, RequestParams params, AsyncHttpResponseHandler handler) {
         if (Network.isNetworkAvailable(context) && Network.isOnline()) {
@@ -50,17 +50,27 @@ public class TwitterClient extends OAuthBaseClient {
         }
     }
 
-	public void getHomeTimeline(long maxId, AsyncHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("statuses/home_timeline.json");
-		RequestParams params = new RequestParams();
-		params.put("count", 25);
-		params.put("since_id", 1);
+    public void getUserInfo(String screenName, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("account/verify_credentials.json");
+        RequestParams params = new RequestParams();
+        if (screenName != null) {
+            params.put("screen_name", screenName);
+        }
+
+        get(apiUrl, params, handler);
+    }
+
+    public void getHomeTimeline(long maxId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/home_timeline.json");
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        params.put("since_id", 1);
         if (maxId >= 0) {
             params.put("max_id", maxId - 1);
         }
 
-		get(apiUrl, params, handler);
-	}
+        get(apiUrl, params, handler);
+    }
 
     public void getMentionsTimeline(long maxId, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/mentions_timeline.json");
@@ -69,6 +79,18 @@ public class TwitterClient extends OAuthBaseClient {
         if (maxId >= 0) {
             params.put("max_id", maxId - 1);
         }
+
+        get(apiUrl, params, handler);
+    }
+
+    public void getUserTimeline(String screenName, long maxId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/user_timeline.json");
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        if (maxId >= 0) {
+            params.put("max_id", maxId - 1);
+        }
+        params.put("screen_name", screenName);
 
         get(apiUrl, params, handler);
     }
@@ -119,7 +141,7 @@ public class TwitterClient extends OAuthBaseClient {
     }
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
-	 * 	  i.e getApiUrl("statuses/home_timeline.json");
+     * 	  i.e getApiUrl("statuses/home_timeline.json");
 	 * 2. Define the parameters to pass to the request (query or body)
 	 *    i.e RequestParams params = new RequestParams("foo", "bar");
 	 * 3. Define the request method and make a call to the client
