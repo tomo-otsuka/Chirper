@@ -6,6 +6,7 @@ import com.codepath.apps.Chirper.fragments.ComposeTweetDialogFragment;
 import com.codepath.apps.Chirper.models.Entity;
 import com.codepath.apps.Chirper.models.Tweet;
 import com.codepath.apps.Chirper.utils.ParseRelativeDate;
+import com.codepath.apps.Chirper.utils.PatternEditableBuilder;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
@@ -13,6 +14,7 @@ import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,7 +59,28 @@ public class TweetDetailActivity extends BaseActivity implements ComposeTweetDia
         tvUsername.setText(mTweet.getUser().getName());
         String screenName = String.format("@%s", mTweet.getUser().getScreenName());
         tvScreenName.setText(screenName);
+
         tvBody.setText(mTweet.getText());
+        new PatternEditableBuilder().
+                addPattern(Pattern.compile("\\@(\\w+)"), Color.BLUE,
+                        new PatternEditableBuilder.SpannableClickedListener() {
+                            @Override
+                            public void onSpanClicked(String text) {
+                                Intent intent = new Intent(TweetDetailActivity.this, ProfileActivity.class);
+                                intent.putExtra("screenName", text);
+                                TweetDetailActivity.this.startActivity(intent);
+                            }
+                        }).
+                addPattern(Pattern.compile("#(\\w+)"), Color.BLUE,
+                        new PatternEditableBuilder.SpannableClickedListener() {
+                            @Override
+                            public void onSpanClicked(String text) {
+                                Intent intent = new Intent(TweetDetailActivity.this, SearchTimelineActivity.class);
+                                intent.putExtra("q", text);
+                                TweetDetailActivity.this.startActivity(intent);
+                            }
+                        }).into(tvBody);
+
         tvRelativeTime.setText(ParseRelativeDate.getRelativeTimeAgo(mTweet.getCreatedAt()));
         ivProfileImage.setImageResource(0);
         Picasso.with(this).load(mTweet.getUser().getProfileImageUrl())
