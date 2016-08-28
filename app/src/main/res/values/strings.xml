@@ -5,5 +5,10 @@
     <string name="login_label">Sign in with Twitter</string>
     <string name="compose_tweet_hint">What\'s happening?</string>
     <string name="tweet">Tweet</string>
+    <string name="send">Send</string>
+    <string name="compose_direct_message_hint">Start a new message</string>
+    <string name="send_to_hint">\@ScreenName</string>
+    <string name="to">To:</string>
+    <string name="Messages">Messages</string>
 
 </resources>

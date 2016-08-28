@@ -23,6 +23,11 @@ public class BaseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goDirectMessage(MenuItem mi) {
+        Intent intent = new Intent(this, DirectMessagesActivity.class);
+        startActivity(intent);
+    }
+
     public void onProfileView(MenuItem mi) {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);

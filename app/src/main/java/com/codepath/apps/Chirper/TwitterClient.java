@@ -4,6 +4,7 @@ import com.codepath.apps.Chirper.models.User;
 import com.codepath.apps.Chirper.utils.Network;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.scribe.builder.api.Api;
@@ -167,6 +168,39 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("skip_status", true);
 
         get(apiUrl, params, handler);
+    }
+
+    public void getDirectMessages(long maxId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("direct_messages.json");
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        if (maxId > 0) {
+            params.put("max_id", maxId);
+        }
+        params.put("skip_status", true);
+
+        get(apiUrl, params, handler);
+    }
+
+    public void getDirectMessagesSent(long maxId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("direct_messages/sent.json");
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        if (maxId > 0) {
+            params.put("max_id", maxId);
+        }
+        params.put("skip_status", true);
+
+        get(apiUrl, params, handler);
+    }
+
+    public void postDirectMessage(String screenName, String text, JsonHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("direct_messages/new.json");
+        RequestParams params = new RequestParams();
+        params.put("screen_name", screenName);
+        params.put("text", text);
+
+        post(apiUrl, params, handler);
     }
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
