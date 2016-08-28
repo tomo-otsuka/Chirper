@@ -22,12 +22,14 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -109,5 +111,21 @@ public class ProfileActivity extends AppCompatActivity {
 
         tvFollowersCount.setText(ssbFollowers, TextView.BufferType.EDITABLE);
         tvFollowingCount.setText(ssbFollowing, TextView.BufferType.EDITABLE);
+    }
+
+    @OnClick(R.id.tvFollowersCount)
+    public void showFollowers(View v) {
+        Intent intent = new Intent(this, UsersActivity.class);
+        intent.putExtra("user", Parcels.wrap(user));
+        intent.putExtra("type", "Followers");
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.tvFollowingCount)
+    public void showFollowing(View v) {
+        Intent intent = new Intent(this, UsersActivity.class);
+        intent.putExtra("user", Parcels.wrap(user));
+        intent.putExtra("type", "Following");
+        startActivity(intent);
     }
 }
