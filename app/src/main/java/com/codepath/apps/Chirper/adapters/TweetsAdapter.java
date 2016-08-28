@@ -3,6 +3,7 @@ package com.codepath.apps.Chirper.adapters;
 import com.codepath.apps.Chirper.R;
 import com.codepath.apps.Chirper.TwitterClient;
 import com.codepath.apps.Chirper.activities.ProfileActivity;
+import com.codepath.apps.Chirper.activities.SearchTimelineActivity;
 import com.codepath.apps.Chirper.activities.TweetDetailActivity;
 import com.codepath.apps.Chirper.fragments.ComposeTweetDialogFragment;
 import com.codepath.apps.Chirper.models.Entity;
@@ -193,14 +194,23 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         holder.tvBody.setText(tweet.getText());
         new PatternEditableBuilder().
                 addPattern(Pattern.compile("\\@(\\w+)"), Color.BLUE,
-                new PatternEditableBuilder.SpannableClickedListener() {
-                    @Override
-                    public void onSpanClicked(String text) {
-                        Intent intent = new Intent(mContext, ProfileActivity.class);
-                        intent.putExtra("screenName", text);
-                        mContext.startActivity(intent);
-                    }
-                }).into(holder.tvBody);
+                        new PatternEditableBuilder.SpannableClickedListener() {
+                            @Override
+                            public void onSpanClicked(String text) {
+                                Intent intent = new Intent(mContext, ProfileActivity.class);
+                                intent.putExtra("screenName", text);
+                                mContext.startActivity(intent);
+                            }
+                        }).
+                addPattern(Pattern.compile("#(\\w+)"), Color.BLUE,
+                        new PatternEditableBuilder.SpannableClickedListener() {
+                            @Override
+                            public void onSpanClicked(String text) {
+                                Intent intent = new Intent(mContext, SearchTimelineActivity.class);
+                                intent.putExtra("q", text);
+                                mContext.startActivity(intent);
+                            }
+                        }).into(holder.tvBody);
 
         holder.tvRelativeTime.setText(ParseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         holder.ivProfileImage.setImageResource(0);
