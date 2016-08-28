@@ -3,4 +3,7 @@
     <color name="twitter_grey">#AAB8C2</color>
     <color name="retweeted">#19CF86</color>
     <color name="liked">#E81C4F</color>
+    <color name="primary">#00aced</color>
+    <color name="primaryDark">#0084b4</color>
+    <color name="accent">#1dcaff</color>
 </resources>

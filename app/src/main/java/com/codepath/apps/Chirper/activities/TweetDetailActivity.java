@@ -92,6 +92,13 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
         tvLikeCount.setText(String.format("%s", mTweet.getLikeCount()));
     }
 
+    @OnClick({R.id.ivProfileImage, R.id.tvUsername, R.id.tvScreenName})
+    public void openProfileActivity(View v) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("user", Parcels.wrap(mTweet.getUser()));
+        v.getContext().startActivity(intent);
+    }
+
     @OnClick(R.id.ivReply)
     public void showComposeTweetDialog(View v) {
         FragmentManager fm = getSupportFragmentManager();

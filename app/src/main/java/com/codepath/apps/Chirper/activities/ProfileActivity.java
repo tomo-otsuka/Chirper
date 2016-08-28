@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -48,8 +49,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        Intent intent = getIntent();
+        User userIntent = Parcels.unwrap(intent.getParcelableExtra("user"));
+
         client = TwitterApplication.getRestClient();
-        client.getUserInfo(null, new JsonHttpResponseHandler() {
+        client.getUserInfo(userIntent, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
@@ -66,10 +70,11 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
-        String screenName = intent.getStringExtra("screenName");
-
         if (savedInstanceState == null) {
+            String screenName = null;
+            if (userIntent != null) {
+                screenName = userIntent.getScreenName();
+            }
             UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

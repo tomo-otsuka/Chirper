@@ -2,6 +2,7 @@ package com.codepath.apps.Chirper.adapters;
 
 import com.codepath.apps.Chirper.R;
 import com.codepath.apps.Chirper.TwitterClient;
+import com.codepath.apps.Chirper.activities.ProfileActivity;
 import com.codepath.apps.Chirper.activities.TweetDetailActivity;
 import com.codepath.apps.Chirper.fragments.ComposeTweetDialogFragment;
 import com.codepath.apps.Chirper.models.Entity;
@@ -62,6 +63,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             Tweet tweet = mTweets.get(position);
             Intent intent = new Intent(v.getContext(), TweetDetailActivity.class);
             intent.putExtra("tweet", Parcels.wrap(tweet));
+            v.getContext().startActivity(intent);
+        }
+
+        @OnClick({R.id.ivProfileImage, R.id.tvUsername, R.id.tvScreenName})
+        public void openProfileActivity(View v) {
+            int position = getLayoutPosition();
+            Tweet tweet = mTweets.get(position);
+            Intent intent = new Intent(v.getContext(), ProfileActivity.class);
+            intent.putExtra("user", Parcels.wrap(tweet.getUser()));
             v.getContext().startActivity(intent);
         }
 

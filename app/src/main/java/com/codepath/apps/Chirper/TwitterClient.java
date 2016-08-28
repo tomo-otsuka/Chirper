@@ -1,5 +1,6 @@
 package com.codepath.apps.Chirper;
 
+import com.codepath.apps.Chirper.models.User;
 import com.codepath.apps.Chirper.utils.Network;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -50,11 +51,13 @@ public class TwitterClient extends OAuthBaseClient {
         }
     }
 
-    public void getUserInfo(String screenName, AsyncHttpResponseHandler handler) {
+    public void getUserInfo(User user, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("account/verify_credentials.json");
         RequestParams params = new RequestParams();
-        if (screenName != null) {
-            params.put("screen_name", screenName);
+        if (user != null) {
+            apiUrl = getApiUrl("users/show.json");
+            params.put("user_id", user.getNetworkId());
+            params.put("screen_name", user.getScreenName());
         }
 
         get(apiUrl, params, handler);
