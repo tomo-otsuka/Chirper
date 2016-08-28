@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -58,6 +59,13 @@ public class UsersActivity extends BaseActivity {
         populateUsers();
 
         setEventListeners();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_timeline, menu);
+        getSupportActionBar().setTitle(String.format("@%s %s", user.getScreenName(), type));
+        return true;
     }
 
     private void populateUsers() {
