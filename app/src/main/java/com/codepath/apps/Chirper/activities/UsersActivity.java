@@ -32,6 +32,8 @@ public class UsersActivity extends BaseActivity {
     private UsersAdapter usersAdapter;
     private TwitterClient client;
     private long cursor = -1;
+    private String type;
+    private User user;
     
     @BindView(R.id.rvUsers) RecyclerView rvUsers;
 
@@ -50,15 +52,33 @@ public class UsersActivity extends BaseActivity {
         rvUsers.addItemDecoration(new DividerItemDecoration(activity));
 
         Intent intent = getIntent();
-        User user = Parcels.unwrap(intent.getParcelableExtra("user"));
-        String type = intent.getStringExtra("type");
+        user = Parcels.unwrap(intent.getParcelableExtra("user"));
+        type = intent.getStringExtra("type");
 
+        populateUsers();
+
+        setEventListeners();
+    }
+
+    private void populateUsers() {
         if (type.equals("Followers")) {
             populateFollowers(user);
         } else if (type.equals("Following")) {
             populateFollowing(user);
         }
     }
+
+    private void setEventListeners() {
+        rvUsers.addOnScrollListener(new com.codepath.apps.Chirper.utils.EndlessRecyclerViewScrollListener((LinearLayoutManager) rvUsers.getLayoutManager()) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                if (totalItemsCount >= 25) {
+                    populateUsers();
+                }
+            }
+        });
+    }
+
 
     private void populateFollowers(User user) {
         client.getUserFollowers(user, cursor, new JsonHttpResponseHandler() {
