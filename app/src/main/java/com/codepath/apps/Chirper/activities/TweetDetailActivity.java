@@ -94,7 +94,7 @@ public class TweetDetailActivity extends BaseActivity implements ComposeTweetDia
     @OnClick({R.id.ivProfileImage, R.id.tvUsername, R.id.tvScreenName})
     public void openProfileActivity(View v) {
         Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra("user", Parcels.wrap(mTweet.getUser()));
+        intent.putExtra("screenName", mTweet.getUser().getScreenName());
         v.getContext().startActivity(intent);
     }
 

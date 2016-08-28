@@ -51,10 +51,10 @@ public class ProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        User userIntent = Parcels.unwrap(intent.getParcelableExtra("user"));
+        String screenName = intent.getStringExtra("screenName");
 
         client = TwitterApplication.getRestClient();
-        client.getUserInfo(userIntent, new JsonHttpResponseHandler() {
+        client.getUserInfo(screenName, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
@@ -72,10 +72,6 @@ public class ProfileActivity extends BaseActivity {
         });
 
         if (savedInstanceState == null) {
-            String screenName = null;
-            if (userIntent != null) {
-                screenName = userIntent.getScreenName();
-            }
             UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

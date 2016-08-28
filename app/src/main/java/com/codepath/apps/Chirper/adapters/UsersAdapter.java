@@ -5,8 +5,6 @@ import com.codepath.apps.Chirper.activities.ProfileActivity;
 import com.codepath.apps.Chirper.models.User;
 import com.squareup.picasso.Picasso;
 
-import org.parceler.Parcels;
-
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +40,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             int position = getLayoutPosition();
             User user = mUsers.get(position);
             Intent intent = new Intent(v.getContext(), ProfileActivity.class);
-            intent.putExtra("user", Parcels.wrap(user));
+            intent.putExtra("screenName", user.getScreenName());
             v.getContext().startActivity(intent);
         }
     }

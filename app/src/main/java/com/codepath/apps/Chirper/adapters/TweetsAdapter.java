@@ -8,6 +8,7 @@ import com.codepath.apps.Chirper.fragments.ComposeTweetDialogFragment;
 import com.codepath.apps.Chirper.models.Entity;
 import com.codepath.apps.Chirper.models.Tweet;
 import com.codepath.apps.Chirper.utils.ParseRelativeDate;
+import com.codepath.apps.Chirper.utils.PatternEditableBuilder;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
@@ -16,6 +17,7 @@ import org.parceler.Parcels;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,7 +74,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             int position = getLayoutPosition();
             Tweet tweet = mTweets.get(position);
             Intent intent = new Intent(v.getContext(), ProfileActivity.class);
-            intent.putExtra("user", Parcels.wrap(tweet.getUser()));
+            intent.putExtra("screenName", tweet.getUser().getScreenName());
             v.getContext().startActivity(intent);
         }
 
@@ -186,7 +189,19 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         holder.tvUsername.setText(tweet.getUser().getName());
         String screenName = String.format("@%s", tweet.getUser().getScreenName());
         holder.tvScreenName.setText(screenName);
+
         holder.tvBody.setText(tweet.getText());
+        new PatternEditableBuilder().
+                addPattern(Pattern.compile("\\@(\\w+)"), Color.BLUE,
+                new PatternEditableBuilder.SpannableClickedListener() {
+                    @Override
+                    public void onSpanClicked(String text) {
+                        Intent intent = new Intent(mContext, ProfileActivity.class);
+                        intent.putExtra("screenName", text);
+                        mContext.startActivity(intent);
+                    }
+                }).into(holder.tvBody);
+
         holder.tvRelativeTime.setText(ParseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         holder.ivProfileImage.setImageResource(0);
         Picasso.with(mContext).load(tweet.getUser().getProfileImageUrl())

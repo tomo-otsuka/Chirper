@@ -7,8 +7,6 @@ import com.codepath.apps.Chirper.models.DirectMessage;
 import com.codepath.apps.Chirper.utils.ParseRelativeDate;
 import com.squareup.picasso.Picasso;
 
-import org.parceler.Parcels;
-
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
@@ -50,7 +48,7 @@ public class DirectMessagesAdapter extends RecyclerView.Adapter<DirectMessagesAd
             int position = getLayoutPosition();
             DirectMessage directMessage = mDirectMessages.get(position);
             Intent intent = new Intent(v.getContext(), ProfileActivity.class);
-            intent.putExtra("directMessage", Parcels.wrap(directMessage));
+            intent.putExtra("screenName", directMessage.getSender().getScreenName());
             v.getContext().startActivity(intent);
         }
 
