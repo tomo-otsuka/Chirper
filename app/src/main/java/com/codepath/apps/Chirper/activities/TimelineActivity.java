@@ -5,20 +5,16 @@ import com.codepath.apps.Chirper.R;
 import com.codepath.apps.Chirper.fragments.HomeTimelineFragment;
 import com.codepath.apps.Chirper.fragments.MentionsTimelineFragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends BaseActivity {
 
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tabs) PagerSlidingTabStrip tabStrip;
@@ -33,18 +29,6 @@ public class TimelineActivity extends AppCompatActivity {
         TweetsPagerAdapter pagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         tabStrip.setViewPager(viewPager);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_timeline, menu);
-        return true;
-    }
-
-    public void onProfileView(MenuItem mi) {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        //intent.putExtra("screenName", null);
-        startActivity(intent);
     }
 
     public class TweetsPagerAdapter extends FragmentPagerAdapter {

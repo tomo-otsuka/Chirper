@@ -16,7 +16,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,7 +29,7 @@ import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
-public class TweetDetailActivity extends AppCompatActivity implements ComposeTweetDialogFragment.TweetListener {
+public class TweetDetailActivity extends BaseActivity implements ComposeTweetDialogFragment.TweetListener {
 
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvScreenName) TextView tvScreenName;
