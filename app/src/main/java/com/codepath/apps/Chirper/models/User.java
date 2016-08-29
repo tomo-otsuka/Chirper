@@ -26,6 +26,9 @@ public class User extends Model {
     @Column(name = "profileImageUrl")
     public String profileImageUrl;
 
+    @Column(name = "profileBackgroundImageUrl")
+    public String profileBackgroundImageUrl;
+
     @Column(name = "networkId")
     public long networkId;
 
@@ -50,6 +53,10 @@ public class User extends Model {
         return profileImageUrl;
     }
 
+    public String getProfileBackgroundImageUrl() {
+        return profileBackgroundImageUrl;
+    }
+
     public long getNetworkId() {
         return networkId;
     }
@@ -72,6 +79,7 @@ public class User extends Model {
         name = jsonObject.getString("name");
         screenName = jsonObject.getString("screen_name");
         profileImageUrl = jsonObject.getString("profile_image_url");
+        profileBackgroundImageUrl = jsonObject.getString("profile_background_image_url");
         networkId = jsonObject.getLong("id");
         bio = jsonObject.getString("description");
         followersCount = jsonObject.getInt("followers_count");

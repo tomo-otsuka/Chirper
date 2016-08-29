@@ -37,6 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class ProfileActivity extends BaseActivity implements TweetsListFragment.TweetsListListener {
 
@@ -47,6 +48,7 @@ public class ProfileActivity extends BaseActivity implements TweetsListFragment.
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvScreenName) TextView tvScreenName;
     @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.ivProfileBackgroundImage) ImageView ivProfileBackgroundImage;
     @BindView(R.id.tvBio) TextView tvBio;
     @BindView(R.id.tvFollowingCount) TextView tvFollowingCount;
     @BindView(R.id.tvFollowersCount) TextView tvFollowersCount;
@@ -89,7 +91,13 @@ public class ProfileActivity extends BaseActivity implements TweetsListFragment.
         tvUsername.setText(user.getName());
         tvScreenName.setText(String.format("@%s", user.getScreenName()));
         tvBio.setText(user.getBio());
-        Picasso.with(this).load(user.getProfileImageUrl()).into(ivProfileImage);
+        Picasso.with(this).load(user.getProfileImageUrl())
+                .transform(new RoundedCornersTransformation(2, 2))
+                .into(ivProfileImage);
+        Picasso.with(this).load(user.getProfileBackgroundImageUrl())
+                .fit()
+                .centerCrop()
+                .into(ivProfileBackgroundImage);
 
         String strFollowersCount = String.format("%s", user.getFollowersCount());
         String strFollowingCount = String.format("%s", user.getFollowingCount());

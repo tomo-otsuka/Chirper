@@ -144,7 +144,7 @@ public class Tweet extends Model {
     }
 
     public static List<Tweet> recentItems() {
-        List<Tweet> tweets = new Select().from(Tweet.class).orderBy("createdAt DESC").limit("300").execute();
+        List<Tweet> tweets = new Select().from(Tweet.class).orderBy("networkId DESC").limit("300").execute();
         for (Tweet tweet : tweets) {
             tweet.entities = new ArrayList<Entity>();
             tweet.entities.addAll(Entity.getByTweet(tweet));

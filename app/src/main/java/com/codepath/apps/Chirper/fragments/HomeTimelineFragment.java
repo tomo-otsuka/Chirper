@@ -43,6 +43,8 @@ public class HomeTimelineFragment extends TweetsListFragment {
                     }
                     Toast.makeText(activity, errorString, Toast.LENGTH_LONG).show();
 
+                    loadCachedTweets();
+
                     swipeContainer.setRefreshing(false);
                     TweetsListListener listener = (TweetsListListener) getActivity();
                     listener.onPopulateFinished();
