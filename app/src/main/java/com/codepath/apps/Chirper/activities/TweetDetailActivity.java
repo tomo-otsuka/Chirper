@@ -55,6 +55,7 @@ public class TweetDetailActivity extends BaseActivity implements ComposeTweetDia
 
         Intent intent = getIntent();
         mTweet = Parcels.unwrap(intent.getParcelableExtra("tweet"));
+        mTweet = mTweet.refresh();
 
         tvUsername.setText(mTweet.getUser().getName());
         String screenName = String.format("@%s", mTweet.getUser().getScreenName());

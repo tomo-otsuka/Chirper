@@ -1,10 +1,15 @@
 package com.codepath.apps.Chirper.adapters;
 
 import com.codepath.apps.Chirper.R;
+import com.codepath.apps.Chirper.activities.TweetDetailActivity;
 import com.codepath.apps.Chirper.models.Entity;
+import com.codepath.apps.Chirper.models.Tweet;
 import com.squareup.picasso.Picasso;
 
+import org.parceler.Parcels;
+
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +25,24 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     private ArrayList<Entity> mMedia;
     private Context mContext;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.ivMedia) ImageView ivMedia;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getLayoutPosition();
+            Entity media = mMedia.get(position);
+            Tweet tweet = media.getTweet();
+
+            Intent intent = new Intent(mContext, TweetDetailActivity.class);
+            intent.putExtra("tweet", Parcels.wrap(tweet));
+            mContext.startActivity(intent);
         }
     }
 

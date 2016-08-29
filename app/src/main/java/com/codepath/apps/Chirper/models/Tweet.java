@@ -3,6 +3,7 @@ package com.codepath.apps.Chirper.models;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 
 import org.json.JSONArray;
@@ -105,11 +106,13 @@ public class Tweet extends Model {
         user = user.getOrCreate();
 
         entities = new ArrayList<>();
-        entities.addAll(Entity.fromJSONArray(jsonObject.getJSONObject("entities").getJSONArray("media")));
-        for (Entity entity : entities) {
-            entity.setTweet(this);
-            entity.setUser(user);
-        }
+        try {
+            entities.addAll(Entity.fromJSONArray(jsonObject.getJSONObject("entities").getJSONArray("media")));
+            for (Entity entity : entities) {
+                entity.setTweet(this);
+                entity.setUser(user);
+            }
+        } catch (JSONException e) {}
 
         liked = jsonObject.getBoolean("favorited");
         likeCount = jsonObject.getLong("favorite_count");
@@ -147,5 +150,17 @@ public class Tweet extends Model {
             tweet.entities.addAll(Entity.getByTweet(tweet));
         }
         return tweets;
+    }
+
+    public Tweet refresh() {
+        From query = new Select().from(Tweet.class).where("networkId = ?", getNetworkId());
+        if (!query.exists()) {
+            return this;
+        } else {
+            Tweet tweet = query.executeSingle();
+            tweet.entities = new ArrayList<>();
+            tweet.entities.addAll(Entity.getByTweet(tweet));
+            return tweet;
+        }
     }
 }
