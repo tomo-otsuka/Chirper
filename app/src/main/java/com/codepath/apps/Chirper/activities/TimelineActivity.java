@@ -4,6 +4,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.Chirper.R;
 import com.codepath.apps.Chirper.fragments.HomeTimelineFragment;
 import com.codepath.apps.Chirper.fragments.MentionsTimelineFragment;
+import com.codepath.apps.Chirper.fragments.TweetsListFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,7 @@ import android.support.v4.view.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TimelineActivity extends BaseActivity {
+public class TimelineActivity extends BaseActivity implements TweetsListFragment.TweetsListListener {
 
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tabs) PagerSlidingTabStrip tabStrip;
@@ -29,6 +30,16 @@ public class TimelineActivity extends BaseActivity {
         TweetsPagerAdapter pagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         tabStrip.setViewPager(viewPager);
+    }
+
+    @Override
+    public void onPopulateStarted() {
+        showProgressBar();
+    }
+
+    @Override
+    public void onPopulateFinished() {
+        hideProgressBar();
     }
 
     public class TweetsPagerAdapter extends FragmentPagerAdapter {

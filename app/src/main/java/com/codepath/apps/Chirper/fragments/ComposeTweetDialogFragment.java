@@ -30,7 +30,6 @@ import cz.msebera.android.httpclient.Header;
 public class ComposeTweetDialogFragment extends DialogFragment {
 
     private int MAX_CHARS_PER_TWEET = 140;
-    private long mReplyToId;
 
     public interface TweetListener {
         public void onTweet();

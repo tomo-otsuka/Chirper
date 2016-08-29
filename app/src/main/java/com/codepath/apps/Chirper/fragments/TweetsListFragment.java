@@ -26,7 +26,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-abstract class TweetsListFragment extends Fragment implements ComposeTweetDialogFragment.TweetListener {
+public abstract class TweetsListFragment extends Fragment implements ComposeTweetDialogFragment.TweetListener {
+
+    public interface TweetsListListener {
+        public void onPopulateStarted();
+        public void onPopulateFinished();
+    }
 
     private TwitterClient client;
     private ArrayList<Tweet> tweets;

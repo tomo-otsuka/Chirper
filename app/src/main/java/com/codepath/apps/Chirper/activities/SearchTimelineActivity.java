@@ -61,6 +61,7 @@ public class SearchTimelineActivity extends BaseActivity implements ComposeTweet
         if (tweets.size() > 0) {
             maxId = tweets.get(tweets.size() - 1).getNetworkId();
         }
+        showProgressBar();
         client.searchTweets(q, maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -72,11 +73,13 @@ public class SearchTimelineActivity extends BaseActivity implements ComposeTweet
                 }
                 tweets.addAll(newTweets);
                 tweetsAdapter.notifyDataSetChanged();
+                hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Toast.makeText(SearchTimelineActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                hideProgressBar();
             }
         });
     }

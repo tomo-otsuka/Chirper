@@ -3,6 +3,7 @@ package com.codepath.apps.Chirper.activities;
 import com.codepath.apps.Chirper.R;
 import com.codepath.apps.Chirper.TwitterApplication;
 import com.codepath.apps.Chirper.TwitterClient;
+import com.codepath.apps.Chirper.fragments.TweetsListFragment;
 import com.codepath.apps.Chirper.fragments.UserTimelineFragment;
 import com.codepath.apps.Chirper.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -31,7 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 
-public class ProfileActivity extends BaseActivity {
+public class ProfileActivity extends BaseActivity implements TweetsListFragment.TweetsListListener {
 
     TwitterClient client;
     User user;
@@ -122,5 +123,15 @@ public class ProfileActivity extends BaseActivity {
         intent.putExtra("user", Parcels.wrap(user));
         intent.putExtra("type", "Following");
         startActivity(intent);
+    }
+
+    @Override
+    public void onPopulateStarted() {
+        showProgressBar();
+    }
+
+    @Override
+    public void onPopulateFinished() {
+        hideProgressBar();
     }
 }

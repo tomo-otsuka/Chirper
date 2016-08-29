@@ -8,8 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 public class BaseActivity extends AppCompatActivity {
+
+    MenuItem miActionProgressItem;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -41,6 +44,30 @@ public class BaseActivity extends AppCompatActivity {
         });
 
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Extract the action-view from the menu item
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showProgressBar() {
+        // Show progress item
+        if (miActionProgressItem != null) {
+            miActionProgressItem.setVisible(true);
+        }
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        if (miActionProgressItem != null) {
+            miActionProgressItem.setVisible(false);
+        }
     }
 
     public void goHome(MenuItem mi) {

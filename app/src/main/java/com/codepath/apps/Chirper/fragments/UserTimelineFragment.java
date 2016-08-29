@@ -31,12 +31,16 @@ public class UserTimelineFragment extends TweetsListFragment {
         if (Network.isNetworkAvailable(activity) && Network.isOnline()) {
             long maxId = getTweetsMaxId();
             String screenName = getArguments().getString("screenName");
+            TweetsListListener listener = (TweetsListListener) getActivity();
+            listener.onPopulateStarted();
             client.getUserTimeline(screenName, maxId, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     addTweets(Tweet.fromJSONArray(response));
 
                     swipeContainer.setRefreshing(false);
+                    TweetsListListener listener = (TweetsListListener) getActivity();
+                    listener.onPopulateFinished();
                 }
 
                 @Override
@@ -50,6 +54,8 @@ public class UserTimelineFragment extends TweetsListFragment {
                     Toast.makeText(activity, errorString, Toast.LENGTH_LONG).show();
 
                     swipeContainer.setRefreshing(false);
+                    TweetsListListener listener = (TweetsListListener) getActivity();
+                    listener.onPopulateFinished();
                 }
             });
         } else {
@@ -58,6 +64,8 @@ public class UserTimelineFragment extends TweetsListFragment {
             loadCachedTweets();
 
             swipeContainer.setRefreshing(false);
+            TweetsListListener listener = (TweetsListListener) getActivity();
+            listener.onPopulateFinished();
         }
     }
 }

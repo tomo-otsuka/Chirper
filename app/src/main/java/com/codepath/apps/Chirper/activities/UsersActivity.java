@@ -89,6 +89,7 @@ public class UsersActivity extends BaseActivity {
 
 
     private void populateFollowers(User user) {
+        showProgressBar();
         client.getUserFollowers(user, cursor, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -98,19 +99,23 @@ public class UsersActivity extends BaseActivity {
                     users.addAll(newUsers);
                     usersAdapter.notifyItemRangeInserted(users.size() - newUsers.size(), newUsers.size());
                     cursor = response.getLong("next_cursor");
+                    hideProgressBar();
                 } catch (JSONException e) {
                     Toast.makeText(UsersActivity.this, "Failed to parse users", Toast.LENGTH_LONG).show();
+                    hideProgressBar();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Toast.makeText(UsersActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                hideProgressBar();
             }
         });
     }
 
     private void populateFollowing(User user) {
+        showProgressBar();
         client.getUserFollowing(user, cursor, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -120,14 +125,17 @@ public class UsersActivity extends BaseActivity {
                     users.addAll(newUsers);
                     usersAdapter.notifyItemRangeInserted(users.size() - newUsers.size(), newUsers.size());
                     cursor = response.getLong("next_cursor");
+                    hideProgressBar();
                 } catch (JSONException e) {
                     Toast.makeText(UsersActivity.this, "Failed to parse users", Toast.LENGTH_LONG).show();
+                    hideProgressBar();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Toast.makeText(UsersActivity.this, errorResponse.toString(), Toast.LENGTH_LONG).show();
+                hideProgressBar();
             }
         });
     }

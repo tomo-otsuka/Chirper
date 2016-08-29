@@ -21,12 +21,16 @@ public class HomeTimelineFragment extends TweetsListFragment {
         final Activity activity = getActivity();
         if (Network.isNetworkAvailable(activity) && Network.isOnline()) {
             long maxId = getTweetsMaxId();
+            TweetsListListener listener = (TweetsListListener) getActivity();
+            listener.onPopulateStarted();
             client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     addTweets(Tweet.fromJSONArray(response));
 
                     swipeContainer.setRefreshing(false);
+                    TweetsListListener listener = (TweetsListListener) getActivity();
+                    listener.onPopulateFinished();
                 }
 
                 @Override
@@ -40,6 +44,8 @@ public class HomeTimelineFragment extends TweetsListFragment {
                     Toast.makeText(activity, errorString, Toast.LENGTH_LONG).show();
 
                     swipeContainer.setRefreshing(false);
+                    TweetsListListener listener = (TweetsListListener) getActivity();
+                    listener.onPopulateFinished();
                 }
             });
         } else {
@@ -48,6 +54,8 @@ public class HomeTimelineFragment extends TweetsListFragment {
             loadCachedTweets();
 
             swipeContainer.setRefreshing(false);
+            TweetsListListener listener = (TweetsListListener) getActivity();
+            listener.onPopulateFinished();
         }
     }
 }
