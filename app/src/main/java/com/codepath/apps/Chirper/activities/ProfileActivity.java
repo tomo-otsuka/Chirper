@@ -4,6 +4,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.Chirper.R;
 import com.codepath.apps.Chirper.TwitterApplication;
 import com.codepath.apps.Chirper.TwitterClient;
+import com.codepath.apps.Chirper.fragments.LikedTimelineFragment;
 import com.codepath.apps.Chirper.fragments.TweetsListFragment;
 import com.codepath.apps.Chirper.fragments.UserMediaFragment;
 import com.codepath.apps.Chirper.fragments.UserTimelineFragment;
@@ -147,7 +148,7 @@ public class ProfileActivity extends BaseActivity implements TweetsListFragment.
     }
 
     public class ProfilePagerAdapter extends FragmentPagerAdapter {
-        private String tabTitles[] = {"Tweets", "Media"};
+        private String tabTitles[] = {"Tweets", "Media", "Liked"};
 
         public ProfilePagerAdapter(FragmentManager fm) {
             super(fm);
@@ -160,8 +161,7 @@ public class ProfileActivity extends BaseActivity implements TweetsListFragment.
             } else if (position == 1) {
                 return UserMediaFragment.newInstance(user);
             } else if (position == 2) {
-            } else {
-                return null;
+                return LikedTimelineFragment.newInstance(user);
             }
             return null;
         }
