@@ -85,7 +85,7 @@ public class DirectMessagesActivity extends BaseActivity implements ComposeDirec
                         ArrayList<DirectMessage> newDirectMessages = DirectMessage.fromJSONArray(response);
                         directMessages.addAll(newDirectMessages);
 
-                        Collections.sort(directMessages, (o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
+                        Collections.sort(directMessages, (o1, o2) -> Long.compare(o2.getNetworkId(), o1.getNetworkId()));
 
                         directMessagesAdapter.notifyDataSetChanged();
                     }
