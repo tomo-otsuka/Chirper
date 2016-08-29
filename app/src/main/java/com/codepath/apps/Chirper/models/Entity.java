@@ -34,6 +34,9 @@ public class Entity extends Model {
     @Column(name = "tweet")
     public Tweet tweet;
 
+    @Column(name = "user")
+    public User user;
+
     public Tweet getTweet() {
         return tweet;
     }
@@ -54,7 +57,9 @@ public class Entity extends Model {
         return type;
     }
 
-    public Entity() { super(); }
+    public Entity() {
+        super();
+    }
 
     public Entity(JSONObject jsonObject) {
         url = jsonObject.optString("media_url");
@@ -83,5 +88,23 @@ public class Entity extends Model {
 
     public static List<Entity> getByTweet(Tweet tweet) {
         return new Select().from(Entity.class).where("tweet = ?", tweet.getId()).execute();
+    }
+
+    public static List<Entity> getByUserId(long userId) {
+        return new Select().from(Entity.class).where("user = ?", userId)
+                .orderBy("id DESC")
+                .limit(25)
+                .execute();
+    }
+
+    public static List<Entity> getByUserId(long userId, Long maxId) {
+        return new Select().from(Entity.class).where("user = ? AND networkId < ?", userId, maxId)
+                .orderBy("networkId DESC")
+                .limit(25)
+                .execute();
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

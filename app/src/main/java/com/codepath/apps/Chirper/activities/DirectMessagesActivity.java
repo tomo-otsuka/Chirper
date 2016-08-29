@@ -62,7 +62,7 @@ public class DirectMessagesActivity extends BaseActivity implements ComposeDirec
     public void showComposeDirectMessageDialog(View v) {
         FragmentManager fm = getSupportFragmentManager();
         ComposeDirectMessageDialogFragment composeDirectMessageDialogFragment = ComposeDirectMessageDialogFragment.newInstance(
-            null
+                null
         );
         composeDirectMessageDialogFragment.show(fm, "fragment_compose_direct_message");
     }
@@ -108,9 +108,7 @@ public class DirectMessagesActivity extends BaseActivity implements ComposeDirec
         rvDirectMessages.addOnScrollListener(new com.codepath.apps.Chirper.utils.EndlessRecyclerViewScrollListener((LinearLayoutManager) rvDirectMessages.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if (totalItemsCount >= 25) {
-                    populateDirectMessages();
-                }
+                populateDirectMessages();
             }
         });
     }

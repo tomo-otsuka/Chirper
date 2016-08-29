@@ -30,6 +30,7 @@ public abstract class TweetsListFragment extends Fragment implements ComposeTwee
 
     public interface TweetsListListener {
         public void onPopulateStarted();
+
         public void onPopulateFinished();
     }
 
@@ -73,9 +74,7 @@ public abstract class TweetsListFragment extends Fragment implements ComposeTwee
         rvTweets.addOnScrollListener(new com.codepath.apps.Chirper.utils.EndlessRecyclerViewScrollListener((LinearLayoutManager) rvTweets.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if (totalItemsCount >= 25) {
-                    populateTimeline();
-                }
+                populateTimeline();
             }
         });
 

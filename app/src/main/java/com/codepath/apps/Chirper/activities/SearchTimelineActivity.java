@@ -88,9 +88,7 @@ public class SearchTimelineActivity extends BaseActivity implements ComposeTweet
         rvTweets.addOnScrollListener(new com.codepath.apps.Chirper.utils.EndlessRecyclerViewScrollListener((LinearLayoutManager) rvTweets.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if (totalItemsCount >= 25) {
-                    populateTweets();
-                }
+                populateTweets();
             }
         });
     }

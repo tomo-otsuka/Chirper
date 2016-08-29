@@ -105,13 +105,11 @@ public class Tweet extends Model {
         user = user.getOrCreate();
 
         entities = new ArrayList<>();
-        try {
-            for (Entity entity : Entity.fromJSONArray(jsonObject.getJSONObject("entities").getJSONArray("media"))) {
-                entity.setTweet(this);
-                entity.saveIfNew();
-                entities.add(entity);
-            }
-        } catch (JSONException e) {}
+        entities.addAll(Entity.fromJSONArray(jsonObject.getJSONObject("entities").getJSONArray("media")));
+        for (Entity entity : entities) {
+            entity.setTweet(this);
+            entity.setUser(user);
+        }
 
         liked = jsonObject.getBoolean("favorited");
         likeCount = jsonObject.getLong("favorite_count");
@@ -133,7 +131,11 @@ public class Tweet extends Model {
 
     public Long saveIfNew() {
         if (!new Select().from(Tweet.class).where("networkId = ?", getNetworkId()).exists()) {
-            return save();
+            Long res = save();
+            for (Entity entity : entities) {
+                entity.saveIfNew();
+            }
+            return res;
         }
         return null;
     }

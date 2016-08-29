@@ -1,9 +1,11 @@
 package com.codepath.apps.Chirper.activities;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.Chirper.R;
 import com.codepath.apps.Chirper.TwitterApplication;
 import com.codepath.apps.Chirper.TwitterClient;
 import com.codepath.apps.Chirper.fragments.TweetsListFragment;
+import com.codepath.apps.Chirper.fragments.UserMediaFragment;
 import com.codepath.apps.Chirper.fragments.UserTimelineFragment;
 import com.codepath.apps.Chirper.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -16,8 +18,11 @@ import org.parceler.Parcels;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -36,6 +41,7 @@ public class ProfileActivity extends BaseActivity implements TweetsListFragment.
 
     TwitterClient client;
     User user;
+    String screenName;
 
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvScreenName) TextView tvScreenName;
@@ -43,6 +49,9 @@ public class ProfileActivity extends BaseActivity implements TweetsListFragment.
     @BindView(R.id.tvBio) TextView tvBio;
     @BindView(R.id.tvFollowingCount) TextView tvFollowingCount;
     @BindView(R.id.tvFollowersCount) TextView tvFollowersCount;
+
+    @BindView(R.id.viewpager) ViewPager viewPager;
+    @BindView(R.id.tabs) PagerSlidingTabStrip tabStrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +61,7 @@ public class ProfileActivity extends BaseActivity implements TweetsListFragment.
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        String screenName = intent.getStringExtra("screenName");
+        screenName = intent.getStringExtra("screenName");
 
         client = TwitterApplication.getRestClient();
         client.getUserInfo(screenName, new JsonHttpResponseHandler() {
@@ -61,6 +70,8 @@ public class ProfileActivity extends BaseActivity implements TweetsListFragment.
                 try {
                     user = new User(response);
                     populateProfileHeader(user);
+                    user = user.getOrCreate();
+                    getUserInfoCallback(savedInstanceState);
                 } catch (JSONException e) {
                     Toast.makeText(ProfileActivity.this, "Could not parse user object", Toast.LENGTH_LONG).show();
                 }
@@ -71,14 +82,6 @@ public class ProfileActivity extends BaseActivity implements TweetsListFragment.
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
-
-        if (savedInstanceState == null) {
-            UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flContainer, userTimelineFragment);
-            ft.commit();
-        }
     }
 
     private void populateProfileHeader(User user) {
@@ -133,5 +136,44 @@ public class ProfileActivity extends BaseActivity implements TweetsListFragment.
     @Override
     public void onPopulateFinished() {
         hideProgressBar();
+    }
+
+    public void getUserInfoCallback(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            ProfilePagerAdapter pagerAdapter = new ProfilePagerAdapter(getSupportFragmentManager());
+            viewPager.setAdapter(pagerAdapter);
+            tabStrip.setViewPager(viewPager);
+        }
+    }
+
+    public class ProfilePagerAdapter extends FragmentPagerAdapter {
+        private String tabTitles[] = {"Tweets", "Media"};
+
+        public ProfilePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return UserTimelineFragment.newInstance(screenName);
+            } else if (position == 1) {
+                return UserMediaFragment.newInstance(user);
+            } else if (position == 2) {
+            } else {
+                return null;
+            }
+            return null;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
     }
 }

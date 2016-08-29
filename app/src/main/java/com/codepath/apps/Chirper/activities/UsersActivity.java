@@ -35,7 +35,7 @@ public class UsersActivity extends BaseActivity {
     private long cursor = -1;
     private String type;
     private User user;
-    
+
     @BindView(R.id.rvUsers) RecyclerView rvUsers;
 
     @Override
@@ -80,9 +80,7 @@ public class UsersActivity extends BaseActivity {
         rvUsers.addOnScrollListener(new com.codepath.apps.Chirper.utils.EndlessRecyclerViewScrollListener((LinearLayoutManager) rvUsers.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if (totalItemsCount >= 25) {
-                    populateUsers();
-                }
+                populateUsers();
             }
         });
     }
